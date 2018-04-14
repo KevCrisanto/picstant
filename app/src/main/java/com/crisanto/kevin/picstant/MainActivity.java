@@ -6,6 +6,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 if (item.getItemId() == R.id.profile) {
                     Toast.makeText(MainActivity.this, "Profile", Toast.LENGTH_LONG).show();
+                    mDrawerLayout.closeDrawer(Gravity.START);
                     return true;
                 } else if(item.getItemId() == R.id.settings) {
                     Toast.makeText(MainActivity.this, "Settings", Toast.LENGTH_LONG).show();
