@@ -36,8 +36,8 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, "Profile", Toast.LENGTH_LONG).show();
                     mDrawerLayout.closeDrawer(Gravity.START);
                     return true;
-                } else if(item.getItemId() == R.id.settings) {
-                    Toast.makeText(MainActivity.this, "Settings", Toast.LENGTH_LONG).show();
+                } else if(item.getItemId() == R.id.likes) {
+                    Toast.makeText(MainActivity.this, "Likes", Toast.LENGTH_LONG).show();
                     return true;
                 } else if(item.getItemId() == R.id.logout) {
                     Toast.makeText(MainActivity.this, "Logout", Toast.LENGTH_LONG).show();

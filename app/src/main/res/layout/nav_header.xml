@@ -4,14 +4,14 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="160dp"
-    android:background="@color/colorPrimary"
+    android:background="@color/colorSemiPurple"
     android:padding="20dp"
     >
 
     <ImageView
         android:layout_width="75dp"
         android:layout_height="75dp"
-        android:src="@drawable/ic_launcher_background"
+        android:src="@drawable/woman"
         android:id="@+id/user_iv"/>
 
     <TextView
