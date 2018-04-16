@@ -1,6 +1,7 @@
 package com.crisanto.kevin.picstant;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 
 public class SharedPreferenceManager {
@@ -38,5 +39,20 @@ public class SharedPreferenceManager {
             return true;
         }
         return false;
+    }
+
+    public void logUserOut(){
+        SharedPreferences sharedPreferences = mContext.getSharedPreferences(FILENAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.apply();
+        mContext.startActivity(new Intent(mContext, LoginActivity.class));
+    }
+
+    public User getUserData(){
+        SharedPreferences sharedPreferences = mContext.getSharedPreferences(FILENAME, Context.MODE_PRIVATE);
+        User user = new User(sharedPreferences.getInt(ID, -1), sharedPreferences.getString(EMAIL, null),
+                sharedPreferences.getString(USERNAME, null));
+        return user;
     }
 }
