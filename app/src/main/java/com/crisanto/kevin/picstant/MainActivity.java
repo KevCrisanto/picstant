@@ -1,5 +1,6 @@
 package com.crisanto.kevin.picstant;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -56,5 +57,17 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        boolean isUserLoggedIn = SharedPreferenceManager.getInstance(getApplicationContext()).isUserLoggedIn();
+        if(!isUserLoggedIn) {
+            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+        } else{
+
+        }
     }
 }

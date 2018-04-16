@@ -2,6 +2,7 @@ package com.crisanto.kevin.picstant;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.AnimationDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -49,9 +50,9 @@ public class LoginActivity extends AppCompatActivity {
 
         username_et = (EditText)  findViewById(R.id.user_name);
         password_et = (EditText)  findViewById(R.id.user_password);
-        sign_up_btn = findViewById(R.id.sign_up_btn);
+        sign_up_btn = (TextView)  findViewById(R.id.sign_up_btn);
         login_btn = (Button) findViewById(R.id.login_btn);
-        forgot_pass_btn = findViewById(R.id.forgot_pass_btn);
+        forgot_pass_btn = (TextView) findViewById(R.id.forgot_pass_btn);
         mProgressDialog = new ProgressDialog(this);
 
         login_btn.setOnClickListener(new View.OnClickListener() {
@@ -96,8 +97,8 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         if (TextUtils.isEmpty(password)) {
-            username_et.setError("Please fill in this field.");
-            username_et.requestFocus();
+            password_et.setError("Please fill in this field.");
+            password_et.requestFocus();
             mProgressDialog.dismiss();
             return;
         }
@@ -109,12 +110,13 @@ public class LoginActivity extends AppCompatActivity {
                     JSONObject jsonObject = new JSONObject(response);
 
                     if(!jsonObject.getBoolean("error")){
+                        mProgressDialog.dismiss();
                         JSONObject jsonObjectUser = jsonObject.getJSONObject("user");
 
                         User user = new User(jsonObjectUser.getInt("id"), jsonObjectUser.getString("email"), jsonObjectUser.getString("username"));
 
                         // store user data inside sharedPreferences
-
+                        SharedPreferenceManager.getInstance(getApplicationContext()).StoreUserData(user);
 
                         // let user in
                         finish();
@@ -128,10 +130,12 @@ public class LoginActivity extends AppCompatActivity {
                 }
 
             }
-        }, new Response.ErrorListener() {
+        },
+        new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Toast.makeText(LoginActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
+                mProgressDialog.dismiss();
             }
         }
         ){
@@ -165,6 +169,18 @@ public class LoginActivity extends AppCompatActivity {
         super.onPause();
         if(mAnimationDrawable != null && !mAnimationDrawable.isRunning()) {
             mAnimationDrawable.stop();
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        boolean isUserLoggedIn = SharedPreferenceManager.getInstance(getApplicationContext()).isUserLoggedIn();
+        if(isUserLoggedIn) {
+            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+        } else{
+
         }
     }
 }
