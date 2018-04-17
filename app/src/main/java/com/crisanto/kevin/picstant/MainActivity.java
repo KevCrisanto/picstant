@@ -3,6 +3,8 @@ package com.crisanto.kevin.picstant;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -29,26 +31,48 @@ public class MainActivity extends AppCompatActivity {
         mActionDrawerToggle.syncState();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        // Default fragment to be displayed
+        //changeFragmentDisplay(mNavigationView.findItem(R.id.home));
+
         // listener for navigation view
         mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                if (item.getItemId() == R.id.profile) {
-                    Toast.makeText(MainActivity.this, "Profile", Toast.LENGTH_LONG).show();
-                    mDrawerLayout.closeDrawer(Gravity.START);
-                    return true;
-                } else if(item.getItemId() == R.id.likes) {
-                    Toast.makeText(MainActivity.this, "Likes", Toast.LENGTH_LONG).show();
-                    return true;
-                } else if(item.getItemId() == R.id.logout) {
-                    Toast.makeText(MainActivity.this, "Logout", Toast.LENGTH_LONG).show();
-                    return true;
-                } else{
-                    Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_LONG).show();
-                }
-                return false;
+                changeFragmentDisplay(item);
+                return true;
             }
         });
+    }
+
+    private void changeFragmentDisplay(MenuItem item){
+
+        Fragment fragment = null;
+
+        if (item.getItemId() == R.id.home) {
+            fragment = new HomeFragment();
+        } else if(item.getItemId() == R.id.search) {
+            fragment = new SearchFragment();
+        } else if(item.getItemId() == R.id.profile) {
+            fragment = new ProfileFragment();
+        } else if(item.getItemId() == R.id.likes) {
+            fragment = new LikesFragment();
+        } else if(item.getItemId() == R.id.camera) {
+            fragment = new CameraFragment();
+        } else if(item.getItemId() == R.id.logout) {
+            Toast.makeText(MainActivity.this, "Logout", Toast.LENGTH_LONG).show();
+        } else{
+            Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_LONG).show();
+        }
+
+        // Hide navigation drawer
+        mDrawerLayout.closeDrawer(Gravity.START);
+
+        if(fragment != null) {
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.main_fragment_content, fragment);
+            ft.commit();
+        }
+        //return false;
     }
 
     @Override

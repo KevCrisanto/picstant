@@ -7,6 +7,7 @@
     <color name="transparent_bg">#2affff</color>
 
     <color name="colorWhite">#FFFFFF</color>
+    <color name="colorBlack">#000000</color>
     <color name="colorPurple">#833ab4</color>
     <color name="colorSemiPurple">#c13584</color>
     <color name="colorPink">#e1306c</color>

@@ -62,7 +62,7 @@
         android:text="Not a member? Sign up now!"
         android:textColor="#ffffff"
         android:textSize="16sp"
-        android:id="@+id/sign_up_button"
+        android:id="@+id/sign_up_btn"
         />
 
     <TextView
