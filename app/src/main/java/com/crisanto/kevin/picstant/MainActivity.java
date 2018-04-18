@@ -10,8 +10,10 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
+import android.support.v7.widget.Toolbar;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -29,37 +31,44 @@ public class MainActivity extends AppCompatActivity {
         mActionDrawerToggle = new ActionBarDrawerToggle( this, mDrawerLayout, R.string.open, R.string.close);
         mDrawerLayout.addDrawerListener(mActionDrawerToggle);
         mActionDrawerToggle.syncState();
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        setSupportActionBar((Toolbar)findViewById(R.id.my_toolbar));
+        getSupportActionBar().setTitle("Picstant");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_home_menu);
 
         // Default fragment to be displayed
-        //changeFragmentDisplay(mNavigationView.findItem(R.id.home));
+        changeFragmentDisplay(R.id.home);
 
         // listener for navigation view
         mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                changeFragmentDisplay(item);
+                changeFragmentDisplay(item.getItemId());
                 return true;
             }
         });
     }
 
-    private void changeFragmentDisplay(MenuItem item){
+    private void changeFragmentDisplay(int item){
 
         Fragment fragment = null;
 
-        if (item.getItemId() == R.id.home) {
+        if (item == R.id.home) {
             fragment = new HomeFragment();
-        } else if(item.getItemId() == R.id.search) {
+        } else if(item == R.id.search) {
             fragment = new SearchFragment();
-        } else if(item.getItemId() == R.id.profile) {
+        } else if(item == R.id.profile) {
             fragment = new ProfileFragment();
-        } else if(item.getItemId() == R.id.likes) {
+        } else if(item == R.id.likes) {
             fragment = new LikesFragment();
-        } else if(item.getItemId() == R.id.camera) {
+        } else if(item == R.id.camera) {
             fragment = new CameraFragment();
-        } else if(item.getItemId() == R.id.logout) {
-            Toast.makeText(MainActivity.this, "Logout", Toast.LENGTH_LONG).show();
+        } else if(item == R.id.logout) {
+            SharedPreferenceManager sharedPreferenceManager = SharedPreferenceManager.getInstance(getApplicationContext());
+            sharedPreferenceManager.logUserOut();
+            startActivity(new Intent(MainActivity.this, LoginActivity.class));
         } else{
             Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_LONG).show();
         }
@@ -84,14 +93,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
     protected void onStart() {
         super.onStart();
 
-        boolean isUserLoggedIn = SharedPreferenceManager.getInstance(getApplicationContext()).isUserLoggedIn();
+/*        boolean isUserLoggedIn = SharedPreferenceManager.getInstance(getApplicationContext()).isUserLoggedIn();
         if(!isUserLoggedIn) {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
         } else{
 
-        }
+        }*/
     }
 }
