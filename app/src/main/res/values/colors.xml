@@ -11,6 +11,8 @@
     <color name="colorPurple">#833ab4</color>
     <color name="colorSemiPurple">#c13584</color>
     <color name="colorPink">#e1306c</color>
+    <color name="colorRed">#FF0000</color>
+    <color name="colorGray">#808080</color>
 
     <color name="fab_color_pressed">#007787</color>
     <color name="fab_color_shadow">#44000000</color>

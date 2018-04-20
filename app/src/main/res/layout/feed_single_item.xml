@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorWhite">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/colorWhite">
+        <!-- Upper relative layout -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:id="@+id/upper_part_layout">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:id="@+id/profile_photo"
+                android:layout_marginTop="15dp"
+                android:layout_marginLeft="15dp"
+                android:layout_centerVertical="true"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:text="name"
+                android:id="@+id/username_tv"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@id/profile_photo"
+                android:textColor="@color/colorBlack"/>
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_three_dots"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="20dp"
+                android:id="@+id/threedots_iv"/>
+
+        </RelativeLayout>
+
+        <!-- Middle Relative layout -->
+        <com.crisanto.kevin.picstant.SquareImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/story_image"
+            android:layout_below="@+id/upper_part_layout"
+            android:scaleType="centerCrop"
+        />
+
+        <!-- Lower Relative Layout -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:id="@+id/lower_part_layout"
+            android:layout_below="@+id/story_image"
+            android:background="@color/colorWhite">
+
+            <!-- Heart holder -->
+            <RelativeLayout
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:background="@color/colorWhite"
+                android:id="@+id/heart_layout">
+
+                <ImageView
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:id="@+id/read_heart_like"
+                    android:layout_centerInParent="true"
+                    android:layout_marginLeft="20dp"
+                    android:visibility="invisible"
+                    android:src="@drawable/ic_red_heart"/>
+
+                <ImageView
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:id="@+id/white_heart_like"
+                    android:layout_centerInParent="true"
+                    android:layout_marginLeft="20dp"
+                    android:visibility="visible"
+                    android:src="@drawable/ic_white_heart"/>
+
+            </RelativeLayout>
+
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:id="@+id/comment_bubble"
+                android:layout_toRightOf="@+id/heart_layout"
+                android:layout_marginLeft="10dp"
+                android:layout_centerVertical="true"
+                android:visibility="visible"
+                android:src="@drawable/ic_comment_bubble"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/lower_of_lower_layout"
+            android:layout_below="@id/lower_part_layout"
+            android:padding="20dp"
+            android:layout_marginBottom="40dp"
+            android:background="@color/colorWhite">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="130 likes"
+                android:textColor="@color/colorBlack"
+                android:textSize="15sp"
+                android:id="@+id/num_of_likes"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="#tags title"
+                android:layout_below="@id/num_of_likes"
+                android:textSize="15sp"
+                android:textColor="@color/colorBlack"
+                android:layout_marginTop="10dp"
+                android:id="@+id/image_tags"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/view_comments"
+                android:layout_below="@id/image_tags"
+                android:textSize="15sp"
+                android:textColor="@color/colorGray"
+                android:layout_marginTop="10dp"
+                android:id="@+id/image_comments"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="20 days ago"
+                android:layout_below="@id/image_comments"
+                android:textSize="15sp"
+                android:textColor="@color/colorGray"
+                android:layout_marginTop="10dp"
+                android:id="@+id/image_time"/>
+        </RelativeLayout>
+    </RelativeLayout>
+
+</RelativeLayout>
