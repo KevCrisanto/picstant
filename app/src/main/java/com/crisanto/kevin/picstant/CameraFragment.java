@@ -1,21 +1,26 @@
 package com.crisanto.kevin.picstant;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+//import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -43,16 +48,20 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import static android.app.Activity.RESULT_OK;
+
 
 public class CameraFragment extends Fragment {
 
     Button upload_btn, capture_btn;
     ImageView captured_iv;
     Uri mImageUri;
-    final int CAPTURE_IMAGE = 1;
+    final int CAPTURE_IMAGE = 1, GALLERY_PICK = 2;
     Bitmap bitmap;
     String mStoryTitle, imageToString, mProfileImage;
     boolean OkToUpload;
+
+    public static final int TAKE_PHOTO = 100;
 
     public CameraFragment() {
         // Required empty public constructor
@@ -88,7 +97,31 @@ public class CameraFragment extends Fragment {
         capture_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                capturePhoto();
+                String[] options = {"Choose from gallery","Take photo"};
+                AlertDialog.Builder build = new AlertDialog.Builder(v.getContext());
+                build.setTitle("Change Image");
+                build.setItems(options, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        switch (which) {
+                            // choose from gallery
+                            case 0:
+                                Intent galleryIntent = new Intent();
+                                galleryIntent.setType("image/*");
+                                galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
+                                startActivityForResult(Intent.createChooser(galleryIntent, "Select Image"), GALLERY_PICK);
+
+                                break;
+                            // Take a photo using camera
+                            case 1:
+                                capturePhoto();
+
+                                break;
+                        }
+                    }
+                });
+                build.show();
             }
         });
 
@@ -101,11 +134,26 @@ public class CameraFragment extends Fragment {
     }
 
     private void capturePhoto() {
+        //StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        //StrictMode.setVmPolicy(builder.build());
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         String imageName = "image.jpg";
         mImageUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), imageName));
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
-        startActivityForResult(cameraIntent, CAPTURE_IMAGE);
+
+        //int permissionCheck = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA);
+        // do we have camera permission?
+        //if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
+            startActivityForResult(cameraIntent, CAPTURE_IMAGE);
+        //}else {
+
+            // we don't have it, request camera permission from system
+            //ActivityCompat.requestPermissions((Activity) getContext(),
+                    //new String[]{Manifest.permission.CAMERA},
+                    //TAKE_PHOTO);
+
+        //}
+
     }
 
     @Override
@@ -114,7 +162,7 @@ public class CameraFragment extends Fragment {
 
         if(requestCode == CAPTURE_IMAGE){
 
-            if(resultCode == Activity.RESULT_OK){
+            if(resultCode == RESULT_OK){
 
                 if(mImageUri != null){
                     // Convert uri to bitmap
@@ -127,6 +175,23 @@ public class CameraFragment extends Fragment {
                             Log.i("bitmap", bitmap.toString());
                         }
                     } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+        if(requestCode == GALLERY_PICK){
+            if(resultCode == RESULT_OK){
+                Uri uri = data.getData();
+                if(uri != null) {
+                    try{
+                        bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), uri);
+                        if(bitmap != null){
+                            OkToUpload = true;
+                            captured_iv.setImageBitmap(bitmap);
+                            Log.i("bitmap", bitmap.toString());
+                        }
+                    }catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
@@ -148,9 +213,13 @@ public class CameraFragment extends Fragment {
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                mStoryTitle = editText.getText().toString();
-                imageToString = convertImageToString();
-                uploadStory();
+                if(OkToUpload) {
+                    mStoryTitle = editText.getText().toString();
+                    imageToString = convertImageToString();
+                    uploadStory();
+                }else{
+                    Toast.makeText(getContext(), "Please take a photo first", Toast.LENGTH_LONG).show();
+                }
             }
         });
 
@@ -213,7 +282,7 @@ public class CameraFragment extends Fragment {
         final String profile_image = mProfileImage;
 
         final ProgressDialog mProgressDialog = new ProgressDialog(getContext());
-        mProgressDialog.setTitle("Log In");
+        mProgressDialog.setTitle("Uploading image");
         mProgressDialog.setMessage("Please wait...");
         mProgressDialog.show();
 
@@ -255,19 +324,28 @@ public class CameraFragment extends Fragment {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> imageMap = new HashMap<>();
-                imageMap.put("image_name", username + "-" + dateOfImage);
+                imageMap.put("image_name", dateOfImage);
                 imageMap.put("image_encoded", imageToString);
-                imageMap.put("title", mStoryTitle);
+                imageMap.put("title",mStoryTitle);
                 imageMap.put("time", currentTime);
                 imageMap.put("username", username);
                 imageMap.put("user_id", String.valueOf(user_id));
                 imageMap.put("profile_image", profile_image);
+                /*imageMap.put("image_name", "first image"); //username + "-" + dateOfImage
+                imageMap.put("image_encoded", "asd"); //imageToString
+                imageMap.put("title","asss"); //mStoryTitle
+                imageMap.put("time", "feb"); //currentTime
+                imageMap.put("username", "kevin"); //username
+                imageMap.put("user_id", "1"); //String.valueOf(user_id)
+                imageMap.put("profile_image", "432");//profile_image*/
                 return imageMap;
             }
 
         }; // end of StringRequest
 
         VolleyHandler.getInstance(getContext().getApplicationContext()).addRequestToQueue(stringRequest);
+
+        OkToUpload = false;
     }
 
     private String dateOfImage(){
