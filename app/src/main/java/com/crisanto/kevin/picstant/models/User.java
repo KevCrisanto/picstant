@@ -1,4 +1,4 @@
-package com.crisanto.kevin.picstant;
+package com.crisanto.kevin.picstant.models;
 
 public class User {
 

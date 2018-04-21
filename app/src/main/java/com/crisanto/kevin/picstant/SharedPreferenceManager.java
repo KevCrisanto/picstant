@@ -1,8 +1,9 @@
 package com.crisanto.kevin.picstant;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
+
+import com.crisanto.kevin.picstant.models.User;
 
 public class SharedPreferenceManager {
     private static final String FILENAME = "PICSTANTLOGIN";
