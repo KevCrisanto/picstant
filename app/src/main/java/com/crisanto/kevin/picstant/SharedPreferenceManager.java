@@ -9,6 +9,7 @@ public class SharedPreferenceManager {
     private static final String FILENAME = "PICSTANTLOGIN";
     private static final String USERNAME = "username";
     private static final String EMAIL = "email";
+    private static final String IMAGE = "image";
     private static final String ID = "id";
 
     private static SharedPreferenceManager mSharedPreferenceManager;
@@ -30,6 +31,7 @@ public class SharedPreferenceManager {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(USERNAME, user.getUsername());
         editor.putString(EMAIL, user.getEmail());
+        editor.putString(IMAGE, user.getImage());
         editor.putInt(ID, user.getId());
         editor.apply();
     }
@@ -52,7 +54,7 @@ public class SharedPreferenceManager {
     public User getUserData(){
         SharedPreferences sharedPreferences = mContext.getSharedPreferences(FILENAME, Context.MODE_PRIVATE);
         User user = new User(sharedPreferences.getInt(ID, -1), sharedPreferences.getString(EMAIL, null),
-                sharedPreferences.getString(USERNAME, null));
+                sharedPreferences.getString(USERNAME, null), sharedPreferences.getString(IMAGE, null));
         return user;
     }
 }

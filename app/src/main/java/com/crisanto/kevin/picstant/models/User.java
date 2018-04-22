@@ -5,9 +5,11 @@ public class User {
     int id;
     String email, username, image;
 
-    public User(int id, String email, String username) {
+    public User(int id, String email, String username, String image) {
+        this.id = id;
         this.email = email;
         this.username = username;
+        this.image = image;
     }
 
     public int getId() {
