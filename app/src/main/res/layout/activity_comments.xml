@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/comment_toolbar">
 
-        <include android:layout="@layout/comment_toolbar"/>
+        <include layout="@layout/comment_toolbar"/>
 
     </RelativeLayout>
 

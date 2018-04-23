@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -34,7 +35,7 @@ public class HomeFragment extends Fragment {
     ArrayList<Story> arrayListStories;
     StoryListAdapter storyListAdapter;
     ProgressDialog mProgressDialog;
-    //JSONArray jsonArrayIds;
+    JSONArray jsonArrayIds;
 
     public HomeFragment() {
         // Required empty public constructor

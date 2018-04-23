@@ -3,6 +3,7 @@ import com.crisanto.kevin.picstant.models.Story;
 import com.squareup.picasso.Picasso;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -65,6 +66,7 @@ public class StoryListAdapter extends ArrayAdapter<Story> {
             TextView number_of_likes = view.findViewById(R.id.num_of_likes);
             TextView tags = view.findViewById(R.id.image_tags);
             TextView date = view.findViewById(R.id.image_time);
+            TextView view_all_comments = view.findViewById(R.id.view_all_comments);
 
             Picasso.get().load(story.getProfile_image()).error(R.drawable.user).into(profile_photo);
             Picasso.get().load(story.getStory_image()).error(R.drawable.user).into(story_image);
@@ -76,7 +78,22 @@ public class StoryListAdapter extends ArrayAdapter<Story> {
             tags.setText(story.getTitle());
             date.setText(story.getTime());
 
+            viewAllComments(view_all_comments, story.getId());
+
         }
         return view;
+    }
+
+    private void viewAllComments(TextView view_all_comments, final int id){
+        view_all_comments.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent viewAllCommentsIntent = new Intent(getContext(), CommentsActivity.class);
+                viewAllCommentsIntent.putExtra("story_id", id);
+                getContext().startActivity(viewAllCommentsIntent);
+
+            }
+        });
     }
 }

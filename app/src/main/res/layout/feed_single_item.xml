@@ -105,7 +105,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/lower_of_lower_layout"
-            android:layout_below="@id/lower_part_layout"
+            android:layout_below="@+id/lower_part_layout"
             android:padding="20dp"
             android:layout_marginBottom="40dp"
             android:background="@color/colorWhite">
@@ -122,7 +122,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="#tags title"
-                android:layout_below="@id/num_of_likes"
+                android:layout_below="@+id/num_of_likes"
                 android:textSize="15sp"
                 android:textColor="@color/colorBlack"
                 android:layout_marginTop="10dp"
@@ -136,13 +136,13 @@
                 android:textSize="15sp"
                 android:textColor="@color/colorGray"
                 android:layout_marginTop="10dp"
-                android:id="@+id/image_comments"/>
+                android:id="@+id/view_all_comments"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="20 days ago"
-                android:layout_below="@id/image_comments"
+                android:layout_below="@+id/view_all_comments"
                 android:textSize="15sp"
                 android:textColor="@color/colorGray"
                 android:layout_marginTop="10dp"
