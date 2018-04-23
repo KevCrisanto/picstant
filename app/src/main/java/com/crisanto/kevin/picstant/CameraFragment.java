@@ -319,7 +319,7 @@ public class CameraFragment extends Fragment {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> imageMap = new HashMap<>();
-                imageMap.put("image_name", dateOfImage);
+                imageMap.put("image_name", String.valueOf(user_id) + "-" + dateOfImage);
                 imageMap.put("image_encoded", imageToString);
                 imageMap.put("title",mStoryTitle);
                 imageMap.put("time", currentTime);

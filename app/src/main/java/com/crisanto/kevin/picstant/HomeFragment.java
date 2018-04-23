@@ -34,7 +34,7 @@ public class HomeFragment extends Fragment {
     ArrayList<Story> arrayListStories;
     StoryListAdapter storyListAdapter;
     ProgressDialog mProgressDialog;
-    JSONArray jsonArrayIds;
+    //JSONArray jsonArrayIds;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -55,6 +55,11 @@ public class HomeFragment extends Fragment {
         feed_lv = view.findViewById(R.id.feed_lv);
 
         arrayListStories = new ArrayList<Story>();
+
+        mProgressDialog = new ProgressDialog(getContext());
+        mProgressDialog.setTitle("News Feed");
+        mProgressDialog.setMessage("Updating News Feed...");
+
         storyListAdapter = new StoryListAdapter(getContext(), R.layout.feed_single_item, arrayListStories);
 
         feed_lv.setAdapter(storyListAdapter);
@@ -66,9 +71,6 @@ public class HomeFragment extends Fragment {
 
     private void getFollowingIds(){
 
-        mProgressDialog = new ProgressDialog(getContext());
-        mProgressDialog.setTitle("News Feed");
-        mProgressDialog.setMessage("Updating News Feed...");
         mProgressDialog.show();
 
         User user = SharedPreferenceManager.getInstance(getContext()).getUserData();
@@ -140,7 +142,7 @@ public class HomeFragment extends Fragment {
                         for (int i = 0; i < jsonArrayStories.length(); i++) {
                             JSONObject jsonObjectSingleStory= jsonArrayStories.getJSONObject(i);
                             Story story = new Story(jsonObjectSingleStory.getInt("id"), jsonObjectSingleStory.getInt("user_id"),
-                                    jsonObjectSingleStory.getInt("likes"), jsonObjectSingleStory.getString("story_image"),
+                                    jsonObjectSingleStory.getInt("num_of_likes"), jsonObjectSingleStory.getString("image_url"),
                                     jsonObjectSingleStory.getString("title"), jsonObjectSingleStory.getString("time"),
                                     jsonObjectSingleStory.getString("profile_image"), jsonObjectSingleStory.getString("username"));
                             arrayListStories.add(story);

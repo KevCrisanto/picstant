@@ -1,5 +1,6 @@
 package com.crisanto.kevin.picstant;
 import com.crisanto.kevin.picstant.models.Story;
+import com.squareup.picasso.Picasso;
 
 import android.content.Context;
 import android.net.Uri;
@@ -20,7 +21,7 @@ public class StoryListAdapter extends ArrayAdapter<Story> {
     private Context mContext;
     ArrayList<Story> storyArrayList;
 
-    public StoryListAdapter(Context context, int resource, ArrayList list) {
+    public StoryListAdapter(@NonNull Context context, int resource, ArrayList<Story> list) {
         super(context, resource, list);
         this.mContext = context;
     }
@@ -65,8 +66,10 @@ public class StoryListAdapter extends ArrayAdapter<Story> {
             TextView tags = view.findViewById(R.id.image_tags);
             TextView date = view.findViewById(R.id.image_time);
 
-            profile_photo.setImageURI(Uri.parse(story.getProfile_image()));
-            story_image.setImageURI(Uri.parse(story.getStory_image()));
+            Picasso.get().load(story.getProfile_image()).error(R.drawable.user).into(profile_photo);
+            Picasso.get().load(story.getStory_image()).error(R.drawable.user).into(story_image);
+            //profile_photo.setImageURI(Uri.parse(story.getProfile_image()));
+            //story_image.setImageURI(Uri.parse(story.getStory_image()));
 
             username.setText(story.getUsername());
             number_of_likes.setText(mContext.getResources().getString(R.string.likes, story.getLike()));
