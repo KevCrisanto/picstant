@@ -39,6 +39,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -47,7 +48,6 @@ import static android.app.Activity.RESULT_OK;
 
 
 public class CameraFragment extends Fragment {
-
     Button upload_btn, capture_btn;
     ImageView captured_iv;
     Uri mImageUri;
@@ -64,7 +64,7 @@ public class CameraFragment extends Fragment {
 
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
     }
@@ -84,7 +84,7 @@ public class CameraFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         getProfileImage();
@@ -260,7 +260,7 @@ public class CameraFragment extends Fragment {
                     }
                 }
         );
-        VolleyHandler.getInstance(getContext()).addRequestToQueue(stringRequest);
+        VolleyHandler.getInstance(getContext().getApplicationContext()).addRequestToQueue(stringRequest);
     }
 
     private void uploadStory() {
@@ -275,6 +275,8 @@ public class CameraFragment extends Fragment {
         final String username = user.getUsername();
         final int user_id = user.getId();
         final String profile_image = mProfileImage;
+
+        final String image_name = String.valueOf(user_id) + "-" + dateOfImage;
 
         final ProgressDialog mProgressDialog = new ProgressDialog(getContext());
         mProgressDialog.setTitle("Uploading image");
@@ -319,7 +321,7 @@ public class CameraFragment extends Fragment {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> imageMap = new HashMap<>();
-                imageMap.put("image_name", String.valueOf(user_id) + "-" + dateOfImage);
+                imageMap.put("image_name", image_name);
                 imageMap.put("image_encoded", imageToString);
                 imageMap.put("title",mStoryTitle);
                 imageMap.put("time", currentTime);
@@ -344,8 +346,20 @@ public class CameraFragment extends Fragment {
 
     private String currentReadableTime(){
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        Date date = new Date(timestamp.getTime());
-        return date.toString();
+        Date initial_date = new Date(timestamp.getTime());
+        String input = initial_date.toString();
+
+        SimpleDateFormat parser = new SimpleDateFormat("EEE MMM d HH:mm:ss ZZZZ yyyy");
+        SimpleDateFormat formatter = new SimpleDateFormat("MMM d yyyy");
+        Date date;
+        String formattedDate = null;
+        try {
+            date = parser.parse(input);
+            formattedDate = formatter.format(date);
+        } catch(java.text.ParseException e){
+            e.printStackTrace();
+        }
+        return formattedDate;
     }
 
     private String convertImageToString(){

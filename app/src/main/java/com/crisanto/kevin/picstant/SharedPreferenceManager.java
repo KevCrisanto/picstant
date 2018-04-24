@@ -26,6 +26,20 @@ public class SharedPreferenceManager {
         return mSharedPreferenceManager;
     }
 
+    public void updateProfileImage(String imageUrl) {
+        SharedPreferences sharedPreferences = mContext.getSharedPreferences(FILENAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(IMAGE, imageUrl);
+        editor.apply();
+    }
+
+    public void updateEmail(String email){
+        SharedPreferences sharedPreferences = mContext.getSharedPreferences(FILENAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(IMAGE, email);
+        editor.apply();
+    }
+
     public void StoreUserData(User user){
         SharedPreferences sharedPreferences = mContext.getSharedPreferences(FILENAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
