@@ -326,13 +326,6 @@ public class CameraFragment extends Fragment {
                 imageMap.put("username", username);
                 imageMap.put("user_id", String.valueOf(user_id));
                 imageMap.put("profile_image", profile_image);
-                /*imageMap.put("image_name", "first image"); //username + "-" + dateOfImage
-                imageMap.put("image_encoded", "asd"); //imageToString
-                imageMap.put("title","asss"); //mStoryTitle
-                imageMap.put("time", "feb"); //currentTime
-                imageMap.put("username", "kevin"); //username
-                imageMap.put("user_id", "1"); //String.valueOf(user_id)
-                imageMap.put("profile_image", "432");//profile_image*/
                 return imageMap;
             }
 

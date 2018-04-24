@@ -68,7 +68,17 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
 
             username.setText(comment.getUsername());
             comment_text.setText(comment.getComment_text());
+
             time.setText(comment.getTime());
+
+//            if(comment.getTime() != null && comment.getTime().length() > 29) {
+//                String complete_time = comment.getTime();
+//                String month_day = complete_time.substring(4, 9); // month, day
+//                String year = complete_time.substring(29, complete_time.length());
+//
+//                time.setText(mContext.getResources().getString(R.string.date, month_day, year));
+//            }
+
 
         }
         return view;
