@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
             fragment = new HomeFragment();
         } else if(item == R.id.search) {
             fragment = new SearchFragment();
+            startActivity(new Intent(MainActivity.this,SearchActivity.class));
         } else if(item == R.id.profile) {
             fragment = new ProfileFragment();
         } else if(item == R.id.likes) {
