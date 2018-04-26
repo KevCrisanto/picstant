@@ -29,6 +29,7 @@ public class SearchActivity extends AppCompatActivity {
     ListView search_results_lv;
     ArrayList<User> arrayListUsers;
     SearchListAdapter searchListAdapter;
+    int user_id;
 
     @Override
     public void onBackPressed() {
@@ -48,6 +49,9 @@ public class SearchActivity extends AppCompatActivity {
         arrayListUsers = new ArrayList<User>();
         searchListAdapter = new SearchListAdapter(SearchActivity.this, R.layout.user_single_item, arrayListUsers);
         search_results_lv.setAdapter(searchListAdapter);
+
+        User user = SharedPreferenceManager.getInstance(getApplicationContext()).getUserData();
+        user_id = user.getId();
 
         search_et.addTextChangedListener(new TextWatcher() {
 
@@ -110,14 +114,17 @@ public class SearchActivity extends AppCompatActivity {
                         for (int i = 0; i < jsonArrayUsers.length(); i++) {
                             JSONObject jsonObjectSingleUser= jsonArrayUsers.getJSONObject(i);
 
-                            User user = new User(jsonObjectSingleUser.getInt("id"), jsonObjectSingleUser.getString("email"),
-                                    jsonObjectSingleUser.getString("username"), jsonObjectSingleUser.getString("image"),
-                                    jsonObjectSingleUser.getInt("following"), jsonObjectSingleUser.getInt("followers"),
-                                    jsonObjectSingleUser.getInt("posts"));
+                            if(user_id != jsonObjectSingleUser.getInt("id")) {
+                                User user = new User(jsonObjectSingleUser.getInt("id"), jsonObjectSingleUser.getString("email"),
+                                        jsonObjectSingleUser.getString("username"), jsonObjectSingleUser.getString("image"),
+                                        jsonObjectSingleUser.getInt("following"), jsonObjectSingleUser.getInt("followers"),
+                                        jsonObjectSingleUser.getInt("posts"));
 
-                            arrayListUsers.add(user);
+                                //arrayListUsers.add(user);
+                                searchListAdapter.add(user);
+                            }
                         }
-                        searchListAdapter.notifyDataSetChanged();
+                        //searchListAdapter.notifyDataSetChanged();
 
                     } else{
                         Toast.makeText(SearchActivity.this, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
