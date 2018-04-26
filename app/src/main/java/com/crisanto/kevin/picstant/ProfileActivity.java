@@ -5,6 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -12,12 +14,15 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.crisanto.kevin.picstant.models.Image;
 import com.crisanto.kevin.picstant.models.User;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -29,6 +34,10 @@ public class ProfileActivity extends AppCompatActivity {
     TextView follow_this_profile, posts_num_tv, following_num_tv, followers_num_tv, display_name_tv, description;
     CircleImageView other_user_profile_image;
     int other_user_id, user_id;
+    GridView images_grid_layout;
+    ArrayList<Image> arrayListImages;
+    ImageArrayAdapter imageArrayAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +50,7 @@ public class ProfileActivity extends AppCompatActivity {
         display_name_tv = (TextView) findViewById(R.id.display_name_tv);
         description = (TextView) findViewById(R.id.description);
         other_user_profile_image = (CircleImageView)findViewById(R.id.profile_image);
+        images_grid_layout = (GridView) findViewById(R.id.images_grid_layout);
 
         follow_this_profile = (TextView) findViewById(R.id.follow_this_profile);
         follow_this_profile.setEnabled(false);
@@ -49,9 +59,59 @@ public class ProfileActivity extends AppCompatActivity {
         User user =  SharedPreferenceManager .getInstance(getApplicationContext()).getUserData();
         user_id = user.getId();
 
+        arrayListImages = new ArrayList<Image>();
+        imageArrayAdapter = new ImageArrayAdapter(getApplicationContext(), 0, arrayListImages);
+        images_grid_layout.setAdapter(imageArrayAdapter);
+
         IsCurrentUserFollowingThisUser();
 
         getOtherUsersProfileData();
+
+        getAllImages();
+    }
+
+    private void getAllImages(){
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, URLS.get_all_images+other_user_id, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    if(!jsonObject.getBoolean("error")){
+                        JSONArray jsonArrayImages = jsonObject.getJSONArray("images");
+
+                        for (int i = 0; i < jsonArrayImages.length(); i++) {
+                            JSONObject jsonObjectSingleImage = jsonArrayImages.getJSONObject(i);
+
+                            Image image = new Image(jsonObjectSingleImage.getInt("id"),
+                                    jsonObjectSingleImage.getString("image_url"),jsonObjectSingleImage.getString("image_name"),
+                                    jsonObjectSingleImage.getInt("user_id"));
+
+                            arrayListImages.add(image);
+                        }
+                        imageArrayAdapter.notifyDataSetChanged();
+
+                    } else{
+                        Toast.makeText(ProfileActivity.this, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
+                    }
+
+                } catch(JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(ProfileActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                }
+        );
+
+        VolleyHandler.getInstance(getApplicationContext()).addRequestToQueue(stringRequest);
+
     }
 
     private void getOtherUsersProfileData(){

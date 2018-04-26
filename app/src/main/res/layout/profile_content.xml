@@ -106,7 +106,7 @@
                     android:numColumns="3"
                     android:verticalSpacing="1dp"
                     android:horizontalSpacing="1dp"
-                    android:stretchMode="columnWidth"></GridView>
+                    android:stretchMode="columnWidth"/>
 
             </RelativeLayout><!-- End of lower part layout -->
 

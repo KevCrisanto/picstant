@@ -1,5 +1,6 @@
 package com.crisanto.kevin.picstant;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -19,6 +20,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class SearchActivity extends AppCompatActivity {
 
@@ -26,6 +29,13 @@ public class SearchActivity extends AppCompatActivity {
     ListView search_results_lv;
     ArrayList<User> arrayListUsers;
     SearchListAdapter searchListAdapter;
+
+    @Override
+    public void onBackPressed() {
+        setResult(RESULT_CANCELED);
+        super.onBackPressed();
+        startActivity(new Intent(SearchActivity.this, MainActivity.class));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,24 +50,45 @@ public class SearchActivity extends AppCompatActivity {
         search_results_lv.setAdapter(searchListAdapter);
 
         search_et.addTextChangedListener(new TextWatcher() {
+
+            private Timer timer = new Timer();
+            private final long DELAY = 500; // milliseconds
+
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
             }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                arrayListUsers.clear();
-                searchListAdapter.clear();
-                if(!s.toString().equals("")) {
-                    getSimilarUSers(s.toString());
+            public void onTextChanged(final CharSequence s, int start, int before, int count) {
+                // user is typing: reset already started timer (if existing)
+                if (timer != null) {
+                    timer.cancel();
                 }
+
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
 
+            public void afterTextChanged(final Editable s) {
+                // user typed: start the timer
+                timer = new Timer();
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        // do your actual work here
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                arrayListUsers.clear();
+                                searchListAdapter.clear();
+                                if(!s.toString().equals("")) {
+                                    getSimilarUSers(s.toString());
+                                }
+                            }
+                        });
+                    }
+                }, 500);
             }
         });
     }
