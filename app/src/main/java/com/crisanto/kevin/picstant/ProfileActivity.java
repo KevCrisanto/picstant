@@ -60,12 +60,21 @@ public class ProfileActivity extends AppCompatActivity {
         user_id = user.getId();
 
         arrayListImages = new ArrayList<Image>();
-        imageArrayAdapter = new ImageArrayAdapter(getApplicationContext(), 0, arrayListImages);
+        imageArrayAdapter = new ImageArrayAdapter(this, 0, arrayListImages);
         images_grid_layout.setAdapter(imageArrayAdapter);
+
+        String username = getIntent().getStringExtra("username");
+        String email = getIntent().getStringExtra("email");
+        String image = getIntent().getStringExtra("image");
+        int following = getIntent().getIntExtra("following", 0);
+        int followers = getIntent().getIntExtra("followers", 0);
+        int posts = getIntent().getIntExtra("posts", 0);
+
+        User userObject  = new User(user_id, email, username, image, following, followers, posts);
 
         IsCurrentUserFollowingThisUser();
 
-        getOtherUsersProfileData();
+        getOtherUsersProfileData(userObject);
 
         getAllImages();
     }
@@ -114,21 +123,14 @@ public class ProfileActivity extends AppCompatActivity {
 
     }
 
-    private void getOtherUsersProfileData(){
+    private void getOtherUsersProfileData(User user){
 
-        String username = getIntent().getStringExtra("username");
-        String email = getIntent().getStringExtra("email");
-        String image = getIntent().getStringExtra("image");
-        int following = getIntent().getIntExtra("following", 0);
-        int followers = getIntent().getIntExtra("followers", 0);
-        int posts = getIntent().getIntExtra("posts", 0);
-
-        Picasso.get().load(image).error(R.drawable.user).into(other_user_profile_image);
-        posts_num_tv.setText(String.valueOf(posts));
-        following_num_tv.setText(String.valueOf(following));
-        followers_num_tv.setText(String.valueOf(followers));
-        display_name_tv.setText(username);
-        description.setText(email);
+        Picasso.get().load(user.getImage()).error(R.drawable.user).into(other_user_profile_image);
+        posts_num_tv.setText(String.valueOf(user.getPosts()));
+        following_num_tv.setText(String.valueOf(user.getFollowing()));
+        followers_num_tv.setText(String.valueOf(user.getFollowers()));
+        display_name_tv.setText(user.getUsername());
+        description.setText(user.getEmail());
 
         /*StringRequest stringRequest = new StringRequest(Request.Method.GET, URLS.get_other_user_data+other_user_id, new Response.Listener<String>() {
             @Override

@@ -68,10 +68,16 @@ public class StoryListAdapter extends ArrayAdapter<Story> {
             TextView date = view.findViewById(R.id.image_time);
             TextView view_all_comments = view.findViewById(R.id.view_all_comments);
 
-            Picasso.get().load(story.getProfile_image()).error(R.drawable.user).into(profile_photo);
-            Picasso.get().load(story.getStory_image()).error(R.drawable.user).into(story_image);
-            //profile_photo.setImageURI(Uri.parse(story.getProfile_image()));
-            //story_image.setImageURI(Uri.parse(story.getStory_image()));
+            if(story.getProfile_image().isEmpty()){
+                profile_photo.setImageResource(R.drawable.user);
+            }else{
+                Picasso.get().load(story.getProfile_image()).error(R.drawable.user).into(profile_photo);
+            }
+            if(story.getStory_image().isEmpty()){
+                profile_photo.setImageResource(R.drawable.user);
+            }else{
+                Picasso.get().load(story.getStory_image()).error(R.drawable.user).into(story_image);
+            }
 
             username.setText(story.getUsername());
             number_of_likes.setText(mContext.getResources().getString(R.string.likes, story.getLike()));

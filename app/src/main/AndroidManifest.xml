@@ -28,7 +28,8 @@
         <activity android:name=".SignUpActivity" />
         <activity android:name=".CommentsActivity" />
         <activity android:name=".ProfileActivity" />
-        <activity android:name=".SearchActivity"></activity>
+        <activity android:name=".SearchActivity" />
+        <activity android:name=".SingleStoryActivity"></activity>
     </application>
 
 </manifest>
