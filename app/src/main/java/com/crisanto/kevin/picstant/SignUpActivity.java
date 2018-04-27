@@ -88,8 +88,22 @@ public class SignUpActivity extends AppCompatActivity {
             return;
         }
 
+        if (email.contains(" ")){
+            email_et.setError("Email cannot contain spaces.");
+            email_et.requestFocus();
+            mProgressDialog.dismiss();
+            return;
+        }
+
         if (TextUtils.isEmpty(username)) {
             username_et.setError("Please fill in this field.");
+            username_et.requestFocus();
+            mProgressDialog.dismiss();
+            return;
+        }
+
+        if (username.contains(" ")) {
+            username_et.setError("Username cannot contain spaces.");
             username_et.requestFocus();
             mProgressDialog.dismiss();
             return;
@@ -116,6 +130,56 @@ public class SignUpActivity extends AppCompatActivity {
             return;
         }
 
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, URLS.username_or_email_exists+username+"&email="+email , new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    if(!jsonObject.getBoolean("error")){
+
+                        boolean username_in_db = jsonObject.getBoolean("state_user");
+                        boolean email_in_db = jsonObject.getBoolean("state_email");
+
+                        if(username_in_db){
+
+                            username_et.setError("This username already exists.");
+                            username_et.requestFocus();
+                            mProgressDialog.dismiss();
+
+                        }else  if(email_in_db){
+                            email_et.setError("This email has already been registered.");
+                            email_et.requestFocus();
+                            mProgressDialog.dismiss();
+                        }else{
+
+                            register_user(email, username, password);
+
+                        }
+
+                    } else{
+                        Toast.makeText(SignUpActivity.this, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
+                    }
+
+                } catch(JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(SignUpActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                }
+        );
+
+        VolleyHandler.getInstance(SignUpActivity.this.getApplicationContext()).addRequestToQueue(stringRequest);
+
+    }
+
+    private void register_user(final String email, final String username, final String password){
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URLS.sign_up_api,
                 new Response.Listener<String>() {
                     @Override
