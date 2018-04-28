@@ -5,9 +5,12 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -64,6 +67,71 @@ public class SettingsActivity extends AppCompatActivity {
                 getNewProfileImage();
             }
         });
+
+        done_edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateUserData();
+            }
+        });
+    }
+
+    private  void updateUserData(){
+        final String description = desc_et.getText().toString();
+        User user = SharedPreferenceManager.getInstance(getApplicationContext()).getUserData();
+        final int user_id = user.getId();
+
+        mProgressDialog.setTitle("Updating profile");
+        mProgressDialog.setMessage("Please wait...");
+        mProgressDialog.show();
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URLS.update_user_data,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+
+                            if (!jsonObject.getBoolean("error")) {
+                                mProgressDialog.dismiss();
+                                String descriptionString = jsonObject.getString("description");
+                                //JSONObject jsonObjectImage = jsonObject.getJSONObject("image");
+
+                                if(!descriptionString.isEmpty()) {
+                                    desc_et.setText(descriptionString);
+                                    SettingsActivity.super.finish();
+                                }
+                            } else {
+                                Toast.makeText(getApplicationContext(), jsonObject.getString("message"), Toast.LENGTH_LONG).show();
+                                mProgressDialog.dismiss();
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+                        mProgressDialog.dismiss();
+                    }
+                }
+        ) {
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> imageMap = new HashMap<>();
+                imageMap.put("description", description);
+                imageMap.put("user_id", String.valueOf(user_id));
+                return imageMap;
+            }
+
+        }; // end of StringRequest
+
+        VolleyHandler.getInstance(getApplicationContext()).addRequestToQueue(stringRequest);
     }
 
     private void getNewProfileImage(){
@@ -71,8 +139,6 @@ public class SettingsActivity extends AppCompatActivity {
         intent.setAction(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");
         startActivityForResult(intent, CHANGE_PROFILE_IMAGE);
-
-
     }
 
     @Override

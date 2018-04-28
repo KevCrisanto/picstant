@@ -40,8 +40,7 @@ public class ProfileFragment extends Fragment {
     ImageArrayAdapter imageArrayAdapter;
     User user;
     int user_id, posts, followers, following;
-    String description;
-
+    String description, image;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -93,6 +92,12 @@ public class ProfileFragment extends Fragment {
                 goToSettings();
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getUserData();
     }
 
     private void goToSettings(){
@@ -155,11 +160,11 @@ public class ProfileFragment extends Fragment {
 
         String username = user.getUsername();
         String email = user.getEmail();
-        String image = user.getImage();
+        //String image = user.getImage();
         //final String description = user.getDescription();
 
         display_name_tv.setText(username);
-        Picasso.get().load(image).error(R.drawable.user).into(user_profile_image);
+
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, URLS.get_user_data+user_id, new Response.Listener<String>() {
             @Override
@@ -174,6 +179,11 @@ public class ProfileFragment extends Fragment {
                         followers = jsonObjectUser.getInt("followers");
                         following = jsonObjectUser.getInt("following");
                         description = jsonObjectUser.getString("description");
+                        image = jsonObjectUser.getString("image");
+
+                        if(!image.isEmpty()) {
+                            Picasso.get().load(image).error(R.drawable.user).into(user_profile_image);
+                        }
 
                         posts_num_tv.setText(String.valueOf(jsonObjectUser.getInt("posts")));
                         following_num_tv.setText(String.valueOf(jsonObjectUser.getInt("following")));
