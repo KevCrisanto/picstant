@@ -11,6 +11,7 @@ public class SharedPreferenceManager {
     private static final String EMAIL = "email";
     private static final String IMAGE = "image";
     private static final String ID = "id";
+    private static final String DESCRIPTION = "description";
 
     private static SharedPreferenceManager mSharedPreferenceManager;
     private static Context mContext;
@@ -37,6 +38,13 @@ public class SharedPreferenceManager {
         SharedPreferences sharedPreferences = mContext.getSharedPreferences(FILENAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(IMAGE, email);
+        editor.apply();
+    }
+
+    public void updateDescription(String description){
+        SharedPreferences sharedPreferences = mContext.getSharedPreferences(FILENAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(DESCRIPTION, description);
         editor.apply();
     }
 

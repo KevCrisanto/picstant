@@ -41,6 +41,7 @@ public class CommentsActivity extends AppCompatActivity {
     ArrayList<Comment> arrayListComments;
     CommentListAdapter commentListAdapter;
     ProgressDialog mProgressDialog;
+    String profile_image;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +68,8 @@ public class CommentsActivity extends AppCompatActivity {
         comment_send_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendCommentToDB(story_id);
+                getDataToSendToDB(story_id);
+                //sendCommentToDB(story_id);
             }
         });
 
@@ -77,6 +79,43 @@ public class CommentsActivity extends AppCompatActivity {
                 goBackToFeed();
             }
         });
+    }
+
+    private void getDataToSendToDB(final int story_id){
+
+        User user = SharedPreferenceManager.getInstance(this).getUserData();
+        final int user_id = user.getId();
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, URLS.get_user_data+user_id, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    if(!jsonObject.getBoolean("error")){
+                        JSONObject jsonObjectUser = jsonObject.getJSONObject("user");
+
+                        profile_image = jsonObjectUser.getString("image");
+                        sendCommentToDB(story_id);
+
+                    } else{
+                        Toast.makeText(getApplicationContext(), jsonObject.getString("message"), Toast.LENGTH_LONG).show();
+                    }
+
+                } catch(JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                }
+        );
+
+        VolleyHandler.getInstance(getApplicationContext().getApplicationContext()).addRequestToQueue(stringRequest);
     }
 
     private void getAllComments(int story_id){
@@ -137,7 +176,7 @@ public class CommentsActivity extends AppCompatActivity {
         User user = SharedPreferenceManager.getInstance(this).getUserData();
         final String username = user.getUsername();
         final int user_id = user.getId();
-        final String profile_image = user.getImage();
+        //final String profile_image = user.getImage();
         final String currentTime = currentReadableTime();
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URLS.send_comment, new Response.Listener<String>() {

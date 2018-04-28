@@ -1,5 +1,6 @@
 package com.crisanto.kevin.picstant;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -7,19 +8,36 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.support.v7.widget.Toolbar;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.crisanto.kevin.picstant.models.User;
+import com.squareup.picasso.Picasso;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
 
     DrawerLayout mDrawerLayout;
     ActionBarDrawerToggle mActionDrawerToggle;
     NavigationView mNavigationView;
+    User user;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Picstant");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_home_menu);
+
+        user = SharedPreferenceManager.getInstance(this).getUserData();
 
         // Default fragment to be displayed
         changeFragmentDisplay(R.id.home);
@@ -67,9 +87,7 @@ public class MainActivity extends AppCompatActivity {
         } else if(item == R.id.camera) {
             fragment = new CameraFragment();
         } else if(item == R.id.logout) {
-            SharedPreferenceManager sharedPreferenceManager = SharedPreferenceManager.getInstance(getApplicationContext());
-            sharedPreferenceManager.logUserOut();
-            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+            logUserOutIfTheyWant();
         } else{
             Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_LONG).show();
         }
@@ -85,10 +103,37 @@ public class MainActivity extends AppCompatActivity {
         //return false;
     }
 
+    private void logUserOutIfTheyWant(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Log out");
+        builder.setMessage("Are you sure that you want to log out?");
+
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                SharedPreferenceManager sharedPreferenceManager = SharedPreferenceManager.getInstance(getApplicationContext());
+                sharedPreferenceManager.logUserOut();
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                dialog.dismiss();
+            }
+        });
+
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        builder.show();
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(mActionDrawerToggle.onOptionsItemSelected(item)){
             return true;
+        }else if(item.getItemId() == R.id.settings){
+            startActivity(new Intent(this, SettingsActivity.class));
         }
         return super.onOptionsItemSelected(item);
     }
@@ -103,11 +148,72 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-/*        boolean isUserLoggedIn = SharedPreferenceManager.getInstance(getApplicationContext()).isUserLoggedIn();
+        boolean isUserLoggedIn = SharedPreferenceManager.getInstance(getApplicationContext()).isUserLoggedIn();
         if(!isUserLoggedIn) {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
         } else{
+            getUserData();
+        }
+    }
 
-        }*/
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        boolean isUserLoggedIn = SharedPreferenceManager.getInstance(getApplicationContext()).isUserLoggedIn();
+        if(!isUserLoggedIn) {
+            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+        } else{
+            getUserData();
+        }
+    }
+
+    private void getUserData(){
+        View navHeader = mNavigationView.getHeaderView(0);
+        final ImageView user_iv = navHeader.findViewById(R.id.user_iv);
+        TextView user_name = navHeader.findViewById(R.id.user_name);
+        final TextView user_email = navHeader.findViewById(R.id.user_email);
+
+        int user_id = user.getId();
+        String username = user.getUsername();
+        user_name.setText(username);
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, URLS.get_user_data+user_id, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    if(!jsonObject.getBoolean("error")){
+                        JSONObject jsonObjectUser = jsonObject.getJSONObject("user");
+
+                        String email = jsonObjectUser.getString("email");
+                        String image = jsonObjectUser.getString("image");
+
+                        user_email.setText(email);
+
+                        if(!image.isEmpty()) {
+                            Picasso.get().load(image).error(R.drawable.user).into(user_iv);
+                        }
+
+                    } else{
+                        Toast.makeText(MainActivity.this, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
+                    }
+
+                } catch(JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(MainActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                }
+        );
+
+        VolleyHandler.getInstance(getApplicationContext()).addRequestToQueue(stringRequest);
     }
 }

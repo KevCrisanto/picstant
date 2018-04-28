@@ -97,10 +97,12 @@ public class SettingsActivity extends AppCompatActivity {
                                 String descriptionString = jsonObject.getString("description");
                                 //JSONObject jsonObjectImage = jsonObject.getJSONObject("image");
 
-                                if(!descriptionString.isEmpty()) {
-                                    desc_et.setText(descriptionString);
-                                    SettingsActivity.super.finish();
-                                }
+                                desc_et.setText(descriptionString);
+                                // Update email
+                                SharedPreferenceManager.getInstance(getApplicationContext()).updateDescription(descriptionString);
+                                // Return to profile
+                                SettingsActivity.super.finish();
+
                             } else {
                                 Toast.makeText(getApplicationContext(), jsonObject.getString("message"), Toast.LENGTH_LONG).show();
                                 mProgressDialog.dismiss();
@@ -187,6 +189,8 @@ public class SettingsActivity extends AppCompatActivity {
 
                                     if(!imageString.isEmpty()) {
                                         Picasso.get().load(imageString).error(R.drawable.user).into(profile_image);
+                                        // Update profile image
+                                        SharedPreferenceManager.getInstance(getApplicationContext()).updateDescription(imageString);
                                     }
                                 } else {
                                     Toast.makeText(getApplicationContext(), jsonObject.getString("message"), Toast.LENGTH_LONG).show();
