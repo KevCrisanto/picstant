@@ -68,4 +68,15 @@
         android:layout_marginLeft="20dp"
         android:id="@+id/image_title"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/view_comments"
+        android:layout_below="@id/image_title"
+        android:textSize="15sp"
+        android:textColor="@color/colorGray"
+        android:layout_marginTop="10dp"
+        android:id="@+id/view_all_comments"
+        android:layout_marginStart="20dp"/>
+
 </RelativeLayout>

@@ -3,7 +3,7 @@ package com.crisanto.kevin.picstant.models;
 public class User {
 
     int id, following, followers, posts;
-    String email, username, image;
+    String email, username, image, description;
 
     public User(int id, String email, String username, String image) {
         this.id = id;
@@ -20,6 +20,25 @@ public class User {
         this.following = following;
         this.followers = followers;
         this.posts = posts;
+    }
+
+    public User(int id, String email, String username, String image, int following, int followers, int posts, String description) {
+        this.id = id;
+        this.email = email;
+        this.username = username;
+        this.image = image;
+        this.following = following;
+        this.followers = followers;
+        this.posts = posts;
+        this.description = description;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public int getFollowing() {

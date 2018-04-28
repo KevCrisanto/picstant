@@ -4,7 +4,11 @@
     <string name="close">Close</string>
     <string name="comments">Comments</string>
     <string name="date">%1$s %2$s</string>
+    <string name="description">Description</string>
+    <string name="done">Done</string>
+    <string name="edit_photo">Edit photo</string>
     <string name="edit_profile">Edit profile</string>
+    <string name="email">Email</string>
     <string name="follow">Follow</string>
     <string name="followers">Followers</string>
     <string name="following">Following</string>
@@ -12,8 +16,11 @@
     <string name="likes">%1$d likes</string>
     <string name="open">Open</string>
     <string name="posts">Posts</string>
-    <string name="search_username">Search by username...</string>
+    <string name="private_data">Private data</string>
+    <string name="search_username">Search by username&#8230;</string>
+    <string name="settings">Settings</string>
     <string name="unfollow">Unfollow</string>
+    <string name="username">Username</string>
     <string name="view_comments">View all comments</string>
 
     <!-- TODO: Remove or change this placeholder text -->

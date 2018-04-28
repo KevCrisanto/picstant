@@ -80,6 +80,7 @@ public class SearchListAdapter extends ArrayAdapter<User>{
         final int following = user.getFollowing();
         final int followers = user.getFollowers();
         final int posts = user.getPosts();
+        final String description = user.getDescription();
 
         view.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,6 +93,7 @@ public class SearchListAdapter extends ArrayAdapter<User>{
                 profileIntent.putExtra("following", following);
                 profileIntent.putExtra("followers", followers);
                 profileIntent.putExtra("posts", posts);
+                profileIntent.putExtra("description", description);
 
                 getContext().startActivity(profileIntent);
             }

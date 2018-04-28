@@ -118,7 +118,7 @@ public class SearchActivity extends AppCompatActivity {
                                 User user = new User(jsonObjectSingleUser.getInt("id"), jsonObjectSingleUser.getString("email"),
                                         jsonObjectSingleUser.getString("username"), jsonObjectSingleUser.getString("image"),
                                         jsonObjectSingleUser.getInt("following"), jsonObjectSingleUser.getInt("followers"),
-                                        jsonObjectSingleUser.getInt("posts"));
+                                        jsonObjectSingleUser.getInt("posts"), jsonObjectSingleUser.getString("description"));
 
                                 //arrayListUsers.add(user);
                                 searchListAdapter.add(user);

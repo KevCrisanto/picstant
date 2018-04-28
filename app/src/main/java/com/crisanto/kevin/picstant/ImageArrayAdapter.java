@@ -88,6 +88,7 @@ public class ImageArrayAdapter extends ArrayAdapter<Image>{
         final String image_name = image.getImage_name();
         final String image_url = image.getImage_url();
         final int user_id = image.getUser_id();
+        final int image_id = image.getId();
 
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,6 +97,7 @@ public class ImageArrayAdapter extends ArrayAdapter<Image>{
                 singleImageIntent.putExtra("image_name", image_name);
                 singleImageIntent.putExtra("image_url", image_url);
                 singleImageIntent.putExtra("user_id", user_id);
+                singleImageIntent.putExtra("image_id", image_id);
                 if(user != null) {
                     singleImageIntent.putExtra("username", user.getUsername());
                     singleImageIntent.putExtra("followers", user.getFollowers());

@@ -31,7 +31,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProfileActivity extends AppCompatActivity {
 
-    TextView follow_this_profile, posts_num_tv, following_num_tv, followers_num_tv, display_name_tv, description;
+    TextView follow_this_profile, posts_num_tv, following_num_tv, followers_num_tv, display_name_tv, description_tv;
     CircleImageView other_user_profile_image;
     int other_user_id, user_id;
     GridView images_grid_layout;
@@ -48,7 +48,7 @@ public class ProfileActivity extends AppCompatActivity {
         following_num_tv = (TextView) findViewById(R.id.following_num_tv);
         followers_num_tv = (TextView) findViewById(R.id.followers_num_tv);
         display_name_tv = (TextView) findViewById(R.id.display_name_tv);
-        description = (TextView) findViewById(R.id.description);
+        description_tv = (TextView) findViewById(R.id.description);
         other_user_profile_image = (CircleImageView)findViewById(R.id.profile_image);
         images_grid_layout = (GridView) findViewById(R.id.images_grid_layout);
 
@@ -69,8 +69,9 @@ public class ProfileActivity extends AppCompatActivity {
         int following = getIntent().getIntExtra("following", 0);
         int followers = getIntent().getIntExtra("followers", 0);
         int posts = getIntent().getIntExtra("posts", 0);
+        String description = getIntent().getStringExtra("description");
 
-        User userObject  = new User(user_id, email, username, image, following, followers, posts);
+        User userObject  = new User(user_id, email, username, image, following, followers, posts, description);
 
         IsCurrentUserFollowingThisUser();
 
@@ -130,7 +131,7 @@ public class ProfileActivity extends AppCompatActivity {
         following_num_tv.setText(String.valueOf(user.getFollowing()));
         followers_num_tv.setText(String.valueOf(user.getFollowers()));
         display_name_tv.setText(user.getUsername());
-        description.setText(user.getEmail());
+        description_tv.setText(user.getDescription());
 
         /*StringRequest stringRequest = new StringRequest(Request.Method.GET, URLS.get_other_user_data+other_user_id, new Response.Listener<String>() {
             @Override

@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,13 +33,14 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProfileFragment extends Fragment {
 
-    TextView follow_this_profile, posts_num_tv, following_num_tv, followers_num_tv, display_name_tv, description;
+    TextView edit_profile, posts_num_tv, following_num_tv, followers_num_tv, display_name_tv, description_tv;
     CircleImageView user_profile_image;
     GridView images_grid_layout;
     ArrayList<Image> arrayListImages;
     ImageArrayAdapter imageArrayAdapter;
     User user;
     int user_id, posts, followers, following;
+    String description;
 
 
     public ProfileFragment() {
@@ -56,14 +59,14 @@ public class ProfileFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        follow_this_profile = view.findViewById(R.id.follow_this_profile);
-        follow_this_profile.setText(getContext().getResources().getString(R.string.edit_profile));
+        edit_profile = view.findViewById(R.id.follow_this_profile);
+        edit_profile.setText(getContext().getResources().getString(R.string.edit_profile));
 
         posts_num_tv = (TextView) view.findViewById(R.id.posts_num_tv);
         following_num_tv = (TextView) view.findViewById(R.id.following_num_tv);
         followers_num_tv = (TextView) view.findViewById(R.id.followers_num_tv);
         display_name_tv = (TextView) view.findViewById(R.id.display_name_tv);
-        description = (TextView) view.findViewById(R.id.description);
+        description_tv = (TextView) view.findViewById(R.id.description);
         user_profile_image = (CircleImageView)view.findViewById(R.id.profile_image);
         images_grid_layout = (GridView) view.findViewById(R.id.images_grid_layout);
 
@@ -81,7 +84,18 @@ public class ProfileFragment extends Fragment {
         return view;
     }
 
-    /*private void goToSettings(){
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        edit_profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToSettings();
+            }
+        });
+    }
+
+    private void goToSettings(){
         Intent settingsIntent = new Intent(getContext(), SettingsActivity.class);
         settingsIntent.putExtra("user_id", user.getId());
         settingsIntent.putExtra("username", user.getUsername());
@@ -90,8 +104,9 @@ public class ProfileFragment extends Fragment {
         settingsIntent.putExtra("following", followers);
         settingsIntent.putExtra("followers", following);
         settingsIntent.putExtra("posts", posts);
+        settingsIntent.putExtra("description", description);
         getContext().startActivity(settingsIntent);
-    }*/
+    }
 
     private void getAllImages(){
 
@@ -141,9 +156,9 @@ public class ProfileFragment extends Fragment {
         String username = user.getUsername();
         String email = user.getEmail();
         String image = user.getImage();
+        //final String description = user.getDescription();
 
         display_name_tv.setText(username);
-        description.setText(email);
         Picasso.get().load(image).error(R.drawable.user).into(user_profile_image);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, URLS.get_user_data+user_id, new Response.Listener<String>() {
@@ -158,10 +173,12 @@ public class ProfileFragment extends Fragment {
                         posts = jsonObjectUser.getInt("posts");
                         followers = jsonObjectUser.getInt("followers");
                         following = jsonObjectUser.getInt("following");
+                        description = jsonObjectUser.getString("description");
 
                         posts_num_tv.setText(String.valueOf(jsonObjectUser.getInt("posts")));
                         following_num_tv.setText(String.valueOf(jsonObjectUser.getInt("following")));
                         followers_num_tv.setText(String.valueOf(jsonObjectUser.getInt("followers")));
+                        description_tv.setText(jsonObjectUser.getString("description"));
 
                     } else{
                         Toast.makeText(getContext(), jsonObject.getString("message"), Toast.LENGTH_LONG).show();

@@ -29,7 +29,8 @@
         <activity android:name=".CommentsActivity" />
         <activity android:name=".ProfileActivity" />
         <activity android:name=".SearchActivity" />
-        <activity android:name=".SingleStoryActivity"></activity>
+        <activity android:name=".SingleStoryActivity" />
+        <activity android:name=".SettingsActivity"></activity>
     </application>
 
 </manifest>
