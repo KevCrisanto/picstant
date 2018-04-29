@@ -105,7 +105,7 @@ public class ProfileFragment extends Fragment {
         settingsIntent.putExtra("user_id", user.getId());
         settingsIntent.putExtra("username", user.getUsername());
         settingsIntent.putExtra("email", user.getEmail());
-        settingsIntent.putExtra("image", user.getImage());
+        settingsIntent.putExtra("profileImage", user.getImage());
         settingsIntent.putExtra("following", followers);
         settingsIntent.putExtra("followers", following);
         settingsIntent.putExtra("posts", posts);

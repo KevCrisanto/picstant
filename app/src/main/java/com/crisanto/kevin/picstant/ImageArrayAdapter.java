@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,11 +64,14 @@ public class ImageArrayAdapter extends ArrayAdapter<Image>{
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
         ImageView imageView;
+        DisplayMetrics metrics = mContext.getResources().getDisplayMetrics();
+        int screenWidth = metrics.widthPixels;
 
         if(convertView == null){
 
             imageView = new ImageView(getContext());
-            imageView.setLayoutParams(new GridView.LayoutParams((int) mContext.getResources().getDimension(R.dimen.grid), (int)mContext.getResources().getDimension(R.dimen.grid)));
+            imageView.setLayoutParams(new GridView.LayoutParams(screenWidth/3, screenWidth/3));
+            //imageView.setLayoutParams(new GridView.LayoutParams((int) mContext.getResources().getDimension(R.dimen.grid), (int)mContext.getResources().getDimension(R.dimen.grid)));
             //imageView.setLayoutParams(new GridView.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, (int)getContext().getResources().getDimension(R.dimen.grid)));
             imageView.setPadding(1,1,1,1);
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);

@@ -37,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
     ActionBarDrawerToggle mActionDrawerToggle;
     NavigationView mNavigationView;
     User user;
+    String mProfileImage, mEmail, mDescription, mUsername;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,7 +135,12 @@ public class MainActivity extends AppCompatActivity {
         if(mActionDrawerToggle.onOptionsItemSelected(item)){
             return true;
         }else if(item.getItemId() == R.id.settings){
-            startActivity(new Intent(this, SettingsActivity.class));
+            Intent settingsIntent = new Intent(this, SettingsActivity.class);
+            settingsIntent.putExtra("profileImage", mProfileImage);
+            settingsIntent.putExtra("email", mEmail);
+            settingsIntent.putExtra("description", mDescription);
+            settingsIntent.putExtra("username", mUsername);
+            startActivity(settingsIntent);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -171,12 +178,12 @@ public class MainActivity extends AppCompatActivity {
     private void getUserData(){
         View navHeader = mNavigationView.getHeaderView(0);
         final ImageView user_iv = navHeader.findViewById(R.id.user_iv);
-        TextView user_name = navHeader.findViewById(R.id.user_name);
+        final TextView user_name = navHeader.findViewById(R.id.user_name);
         final TextView user_email = navHeader.findViewById(R.id.user_email);
 
         int user_id = user.getId();
-        String username = user.getUsername();
-        user_name.setText(username);
+        //String username = user.getUsername();
+        //user_name.setText(username);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, URLS.get_user_data+user_id, new Response.Listener<String>() {
             @Override
@@ -187,13 +194,17 @@ public class MainActivity extends AppCompatActivity {
                     if(!jsonObject.getBoolean("error")){
                         JSONObject jsonObjectUser = jsonObject.getJSONObject("user");
 
-                        String email = jsonObjectUser.getString("email");
-                        String image = jsonObjectUser.getString("image");
+                        mUsername = jsonObjectUser.getString("username");
+                        mEmail = jsonObjectUser.getString("email");
+                        mProfileImage = jsonObjectUser.getString("image");
+                        mDescription = jsonObjectUser.getString("description");
 
-                        user_email.setText(email);
+                        user_email.setText(mEmail);
+                        user_name.setText(mUsername);
 
-                        if(!image.isEmpty()) {
-                            Picasso.get().load(image).error(R.drawable.user).into(user_iv);
+
+                        if(!mProfileImage.isEmpty()) {
+                            Picasso.get().load(mProfileImage).error(R.drawable.user).into(user_iv);
                         }
 
                     } else{

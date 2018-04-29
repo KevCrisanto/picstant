@@ -74,6 +74,27 @@ public class SettingsActivity extends AppCompatActivity {
                 updateUserData();
             }
         });
+
+        String profileImage = getIntent().getStringExtra("profileImage");
+        String email = getIntent().getStringExtra("email");
+        String description = getIntent().getStringExtra("description");
+        String username = getIntent().getStringExtra("username");
+
+        if(!profileImage.isEmpty()){
+            Picasso.get().load(profileImage).error(R.drawable.user).into(profile_image);
+        }
+
+        if(!email.isEmpty()){
+            email_tv.setText(email);
+        }
+
+        if(!username.isEmpty()){
+            username_tv.setText(email);
+        }
+
+        if(!description.isEmpty()){
+            desc_et.setText(description);
+        }
     }
 
     private  void updateUserData(){
