@@ -77,7 +77,6 @@ public class HomeFragment extends Fragment {
         User user = SharedPreferenceManager.getInstance(getContext()).getUserData();
         final int user_id = user.getId();
 
-        // get_following_ids + 3????
         StringRequest stringRequest = new StringRequest(Request.Method.GET, URLS.get_following_ids+user_id, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
