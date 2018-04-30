@@ -9,7 +9,6 @@ import com.squareup.picasso.Picasso;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -21,7 +20,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -97,7 +95,7 @@ public class StoryListAdapter extends ArrayAdapter<Story> {
             }
 
             username.setText(story.getUsername());
-            number_of_likes.setText(mContext.getResources().getString(R.string.likes, story.getLike()));
+            number_of_likes.setText(mContext.getResources().getString(R.string.num_likes, story.getLike()));
             tags.setText(story.getTitle());
             date.setText(story.getTime());
 
@@ -159,7 +157,7 @@ public class StoryListAdapter extends ArrayAdapter<Story> {
                                 // 3. Add this user to likes db indicating he/she liked this story
                                 addCurrentUserToLikesDB(story_id, user_id);
                                 // Immediately increase number of likes
-                                number_of_likes.setText(getContext().getResources().getString(R.string.likes, likes + 1));
+                                number_of_likes.setText(getContext().getResources().getString(R.string.num_likes, likes + 1));
                             }
                         });
 
@@ -174,7 +172,7 @@ public class StoryListAdapter extends ArrayAdapter<Story> {
                                 // 3. Remove this user from liked db
                                 removeCurrentUserFromLikesDB(story_id, user_id);
                                 // Immediately decrease number of likes
-                                number_of_likes.setText(getContext().getResources().getString(R.string.likes, likes - 1));
+                                number_of_likes.setText(getContext().getResources().getString(R.string.num_likes, likes - 1));
                             }
                         });
                     } else{

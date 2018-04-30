@@ -13,7 +13,8 @@
     <string name="followers">Followers</string>
     <string name="following">Following</string>
     <string name="image">Image</string>
-    <string name="likes">%1$d likes</string>
+    <string name="likes">Likes</string>
+    <string name="num_likes">%1$d likes</string>
     <string name="open">Open</string>
     <string name="posts">Posts</string>
     <string name="private_data">Private data</string>

@@ -1,12 +1,16 @@
 package com.crisanto.kevin.picstant;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -58,9 +62,32 @@ public class LikesFragment extends Fragment {
 
         // get the id of all the stories that the user has liked
         getAllStoryIds();
-        // get data from stories
 
         return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        likes_lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Like like = arrayLikesList.get(position);
+
+                if(like != null) {
+                    String username = like.getStory_username();
+                    String image = like.getStory_image();
+                    String title = like.getStory_title();
+
+                    Intent intent = new Intent(getContext(), CheckLikedImageActivity.class);
+                    intent.putExtra("image_url", image);
+                    intent.putExtra("image_title", title);
+
+                    startActivity(intent);
+                }
+            }
+        });
     }
 
     private void getAllStoryIds(){
@@ -127,7 +154,7 @@ public class LikesFragment extends Fragment {
                             JSONObject jsonObjectSingleStory= jsonArrayStories.getJSONObject(i);
 
                             Like like = new Like(jsonObjectSingleStory.getInt("id"), jsonObjectSingleStory.getString("image_url"),
-                                    jsonObjectSingleStory.getString("username"));
+                                    jsonObjectSingleStory.getString("username"), jsonObjectSingleStory.getString("title"));
                             arrayLikesList.add(like);
                         }
                         likeArrayAdapter.notifyDataSetChanged();
