@@ -1,4 +1,4 @@
-package com.crisanto.kevin.picstant;
+package com.crisanto.kevin.picstant.fragments;
 
 import android.Manifest;
 import android.app.Activity;
@@ -14,7 +14,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 //import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityCompat;
@@ -36,6 +35,10 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.crisanto.kevin.picstant.R;
+import com.crisanto.kevin.picstant.helpers.SharedPreferenceManager;
+import com.crisanto.kevin.picstant.helpers.URLS;
+import com.crisanto.kevin.picstant.helpers.VolleyHandler;
 import com.crisanto.kevin.picstant.models.User;
 
 import org.json.JSONException;

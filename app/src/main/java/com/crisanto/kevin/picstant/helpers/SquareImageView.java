@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.crisanto.kevin.picstant;
+package com.crisanto.kevin.picstant.helpers;
 
 import android.content.Context;
 import android.support.v7.widget.AppCompatImageView;

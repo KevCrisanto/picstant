@@ -13,6 +13,10 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.crisanto.kevin.picstant.adapters.SearchListAdapter;
+import com.crisanto.kevin.picstant.helpers.SharedPreferenceManager;
+import com.crisanto.kevin.picstant.helpers.URLS;
+import com.crisanto.kevin.picstant.helpers.VolleyHandler;
 import com.crisanto.kevin.picstant.models.User;
 
 import org.json.JSONArray;

@@ -1,4 +1,4 @@
-package com.crisanto.kevin.picstant;
+package com.crisanto.kevin.picstant.fragments;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -8,15 +8,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
+import com.crisanto.kevin.picstant.R;
+import com.crisanto.kevin.picstant.helpers.SharedPreferenceManager;
+import com.crisanto.kevin.picstant.helpers.URLS;
+import com.crisanto.kevin.picstant.helpers.VolleyHandler;
+import com.crisanto.kevin.picstant.adapters.StoryListAdapter;
 import com.crisanto.kevin.picstant.models.Story;
 import com.crisanto.kevin.picstant.models.User;
 
@@ -25,8 +27,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 
 public class HomeFragment extends Fragment {

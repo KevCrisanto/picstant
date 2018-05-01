@@ -1,4 +1,4 @@
-package com.crisanto.kevin.picstant;
+package com.crisanto.kevin.picstant.adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.crisanto.kevin.picstant.R;
 import com.crisanto.kevin.picstant.models.Like;
 import com.squareup.picasso.Picasso;
 

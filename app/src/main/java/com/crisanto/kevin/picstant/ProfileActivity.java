@@ -3,9 +3,7 @@ package com.crisanto.kevin.picstant;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -14,6 +12,10 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.crisanto.kevin.picstant.adapters.ImageArrayAdapter;
+import com.crisanto.kevin.picstant.helpers.SharedPreferenceManager;
+import com.crisanto.kevin.picstant.helpers.URLS;
+import com.crisanto.kevin.picstant.helpers.VolleyHandler;
 import com.crisanto.kevin.picstant.models.Image;
 import com.crisanto.kevin.picstant.models.User;
 import com.squareup.picasso.Picasso;
@@ -56,7 +58,7 @@ public class ProfileActivity extends AppCompatActivity {
         follow_this_profile.setEnabled(false);
 
         other_user_id = getIntent().getIntExtra("user_id", 0);
-        User user =  SharedPreferenceManager .getInstance(getApplicationContext()).getUserData();
+        User user =  SharedPreferenceManager.getInstance(getApplicationContext()).getUserData();
         user_id = user.getId();
 
         arrayListImages = new ArrayList<Image>();

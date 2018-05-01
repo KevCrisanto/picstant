@@ -1,4 +1,4 @@
-package com.crisanto.kevin.picstant;
+package com.crisanto.kevin.picstant.fragments;
 
 import android.content.Context;
 import android.net.Uri;
@@ -7,6 +7,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.crisanto.kevin.picstant.R;
 
 
 public class SearchFragment extends Fragment {

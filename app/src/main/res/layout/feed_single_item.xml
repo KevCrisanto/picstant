@@ -46,7 +46,7 @@
         </RelativeLayout>
 
         <!-- Middle Relative layout -->
-        <com.crisanto.kevin.picstant.SquareImageView
+        <com.crisanto.kevin.picstant.helpers.SquareImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/story_image"

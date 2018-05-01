@@ -1,19 +1,18 @@
-package com.crisanto.kevin.picstant;
+package com.crisanto.kevin.picstant.adapters;
 
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
+import com.crisanto.kevin.picstant.R;
+import com.crisanto.kevin.picstant.SingleStoryActivity;
 import com.crisanto.kevin.picstant.models.Image;
 import com.crisanto.kevin.picstant.models.User;
 import com.squareup.picasso.Picasso;

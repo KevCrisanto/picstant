@@ -24,10 +24,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginActivity"
+        <activity android:name=".authentication.LoginActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"/>
-        <activity android:name=".SignUpActivity"
+        <activity android:name=".authentication.SignUpActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"/>
         <activity android:name=".CommentsActivity"
