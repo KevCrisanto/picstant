@@ -87,6 +87,7 @@ public class StoryListAdapter extends ArrayAdapter<Story> {
             TextView tags = view.findViewById(R.id.image_tags);
             TextView date = view.findViewById(R.id.image_time);
             TextView view_all_comments = view.findViewById(R.id.view_all_comments);
+            ImageView comment_bubble = view.findViewById(R.id.comment_bubble);
             final ImageView redHeart = view.findViewById(R.id.read_heart_like);
             final ImageView whiteHeart = view.findViewById(R.id.white_heart_like);
 
@@ -106,7 +107,7 @@ public class StoryListAdapter extends ArrayAdapter<Story> {
             tags.setText(story.getTitle());
             date.setText(story.getTime());
 
-            viewAllComments(view_all_comments, story.getId());
+            viewAllComments(view_all_comments, comment_bubble, story.getId());
 
             int story_id = story.getId();
             didCurrentUserLikeThisStory(story_id, redHeart, whiteHeart);
@@ -421,7 +422,17 @@ public class StoryListAdapter extends ArrayAdapter<Story> {
         VolleyHandler.getInstance(getContext().getApplicationContext()).addRequestToQueue(stringRequest);
     }
 
-    private void viewAllComments(TextView view_all_comments, final int id){
+    private void viewAllComments(TextView view_all_comments, ImageView comment_bubble, final int id){
+
+        comment_bubble.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent viewAllCommentsIntent = new Intent(getContext(), CommentsActivity.class);
+                viewAllCommentsIntent.putExtra("story_id", id);
+                getContext().startActivity(viewAllCommentsIntent);
+            }
+        });
+
         view_all_comments.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

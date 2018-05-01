@@ -27,7 +27,7 @@ public class SingleStoryActivity extends AppCompatActivity {
 
     SquareImageView story_image;
     TextView image_title, view_all_comments;
-    ImageView back_arrow, redHeart, whiteHeart;
+    ImageView back_arrow, redHeart, whiteHeart, comment_bubble;
     int image_id;
 
     @Override
@@ -49,6 +49,7 @@ public class SingleStoryActivity extends AppCompatActivity {
         view_all_comments = (TextView)findViewById(R.id.view_all_comments);
         redHeart = (ImageView) findViewById(R.id.read_heart_like);
         whiteHeart = (ImageView) findViewById(R.id.white_heart_like);
+        comment_bubble = (ImageView) findViewById(R.id.comment_bubble);
 
         final String username = getIntent().getStringExtra("username");
         final String email = getIntent().getStringExtra("email");
@@ -85,6 +86,15 @@ public class SingleStoryActivity extends AppCompatActivity {
 
                 startActivity(profileIntent);*/
                 SingleStoryActivity.super.finish();
+            }
+        });
+
+        comment_bubble.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent viewAllCommentsIntent = new Intent(SingleStoryActivity.this, CommentsActivity.class);
+                viewAllCommentsIntent.putExtra("story_id", image_id);
+                SingleStoryActivity.this.startActivity(viewAllCommentsIntent);
             }
         });
 

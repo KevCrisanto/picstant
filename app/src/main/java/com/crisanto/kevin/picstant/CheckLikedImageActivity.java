@@ -27,7 +27,7 @@ public class CheckLikedImageActivity extends AppCompatActivity {
 
     TextView image_title, view_all_comments;
     SquareImageView story_image;
-    ImageView back_arrow, redHeart, whiteHeart;
+    ImageView back_arrow, redHeart, whiteHeart, comment_bubble;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +40,7 @@ public class CheckLikedImageActivity extends AppCompatActivity {
         view_all_comments = (TextView)findViewById(R.id.view_all_comments);
         redHeart = (ImageView) findViewById(R.id.read_heart_like);
         whiteHeart = (ImageView) findViewById(R.id.white_heart_like);
+        comment_bubble = (ImageView) findViewById(R.id.comment_bubble);
 
         String image_url =  getIntent().getStringExtra("image_url");
         String title = getIntent().getStringExtra("image_title");
@@ -51,6 +52,15 @@ public class CheckLikedImageActivity extends AppCompatActivity {
         if(title != null && !title.isEmpty()){
             image_title.setText(title);
         }
+
+        comment_bubble.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent viewAllCommentsIntent = new Intent(CheckLikedImageActivity.this, CommentsActivity.class);
+                viewAllCommentsIntent.putExtra("story_id", story_id);
+                CheckLikedImageActivity.this.startActivity(viewAllCommentsIntent);
+            }
+        });
 
         view_all_comments.setOnClickListener(new View.OnClickListener() {
             @Override
