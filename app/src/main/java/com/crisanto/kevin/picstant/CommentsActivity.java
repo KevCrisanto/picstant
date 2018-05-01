@@ -76,7 +76,8 @@ public class CommentsActivity extends AppCompatActivity {
         back_arrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goBackToFeed();
+                //goBackToFeed();
+                CommentsActivity.super.finish();
             }
         });
     }

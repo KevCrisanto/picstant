@@ -57,11 +57,57 @@
         android:layout_below="@+id/app_bar"
         />
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:id="@+id/lower_part_layout"
+        android:layout_below="@+id/story_image"
+        android:background="@color/colorWhite">
+
+        <!-- Heart holder -->
+        <RelativeLayout
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorWhite"
+            android:id="@+id/heart_layout">
+
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:id="@+id/read_heart_like"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="20dp"
+                android:visibility="invisible"
+                android:src="@drawable/ic_red_heart"/>
+
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:id="@+id/white_heart_like"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="20dp"
+                android:visibility="visible"
+                android:src="@drawable/ic_white_heart"/>
+
+        </RelativeLayout>
+
+        <ImageView
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:id="@+id/comment_bubble"
+            android:layout_toRightOf="@+id/heart_layout"
+            android:layout_marginLeft="10dp"
+            android:layout_centerVertical="true"
+            android:visibility="visible"
+            android:src="@drawable/ic_comment_bubble"/>
+
+    </RelativeLayout>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="#tags title"
-        android:layout_below="@+id/story_image"
+        android:layout_below="@+id/lower_part_layout"
         android:textSize="15sp"
         android:textColor="@color/colorBlack"
         android:layout_marginTop="10dp"

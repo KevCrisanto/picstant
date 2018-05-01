@@ -1,20 +1,26 @@
 package com.crisanto.kevin.picstant;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 //import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -56,7 +62,7 @@ public class CameraFragment extends Fragment {
     String mStoryTitle, imageToString, mProfileImage;
     boolean OkToUpload;
 
-    public static final int TAKE_PHOTO = 100;
+    public static final int TAKE_PHOTO = 100, STORE_PHOTO = 200, READ_PHOTO = 300;
 
     public CameraFragment() {
         // Required empty public constructor
@@ -102,10 +108,17 @@ public class CameraFragment extends Fragment {
                         switch (which) {
                             // choose from gallery
                             case 0:
-                                Intent galleryIntent = new Intent();
-                                galleryIntent.setType("image/*");
-                                galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
-                                startActivityForResult(Intent.createChooser(galleryIntent, "Select Image"), GALLERY_PICK);
+                                int permissionRead = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE);
+                                if (permissionRead == PackageManager.PERMISSION_GRANTED) {
+                                    Intent galleryIntent = new Intent();
+                                    galleryIntent.setType("image/*");
+                                    galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
+                                    startActivityForResult(Intent.createChooser(galleryIntent, "Select Image"), GALLERY_PICK);
+                                }else{
+                                    ActivityCompat.requestPermissions((Activity) getContext(),
+                                            new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                                            READ_PHOTO);
+                                }
 
                                 break;
                             // Take a photo using camera
@@ -129,26 +142,35 @@ public class CameraFragment extends Fragment {
     }
 
     private void capturePhoto() {
-        //StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
-        //StrictMode.setVmPolicy(builder.build());
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         String imageName = "image.jpg";
         mImageUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), imageName));
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
 
-        //int permissionCheck = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA);
-        // do we have camera permission?
-        //if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
+        int permissionCamera = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA);
+        int permissionStorage = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        // do we have camera & storage permission?
+        if (permissionCamera == PackageManager.PERMISSION_GRANTED && permissionStorage == PackageManager.PERMISSION_GRANTED) {
             startActivityForResult(cameraIntent, CAPTURE_IMAGE);
-        //}else {
-
-            // we don't have it, request camera permission from system
-            //ActivityCompat.requestPermissions((Activity) getContext(),
-                    //new String[]{Manifest.permission.CAMERA},
-                    //TAKE_PHOTO);
-
-        //}
-
+        }else {
+            if (permissionCamera != PackageManager.PERMISSION_GRANTED && permissionStorage != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions((Activity) getContext(),
+                        new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        TAKE_PHOTO);
+            }
+            else if (permissionCamera != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions((Activity) getContext(),
+                        new String[]{Manifest.permission.CAMERA},
+                        TAKE_PHOTO);
+            }
+            else{
+                ActivityCompat.requestPermissions((Activity) getContext(),
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        STORE_PHOTO);
+            }
+        }
     }
 
     @Override

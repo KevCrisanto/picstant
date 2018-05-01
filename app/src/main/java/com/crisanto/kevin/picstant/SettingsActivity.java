@@ -1,12 +1,17 @@
 package com.crisanto.kevin.picstant;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
@@ -44,7 +49,7 @@ public class SettingsActivity extends AppCompatActivity {
     ImageView back_arrow;
     ProgressDialog mProgressDialog;
 
-    final int CHANGE_PROFILE_IMAGE = 1;
+    final int CHANGE_PROFILE_IMAGE = 1, EXTERNAL_READ = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +69,14 @@ public class SettingsActivity extends AppCompatActivity {
         edit_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getNewProfileImage();
+                int permissionRead = ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE);
+                if (permissionRead == PackageManager.PERMISSION_GRANTED) {
+                    getNewProfileImage();
+                }else{
+                    ActivityCompat.requestPermissions((Activity) SettingsActivity.this,
+                            new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                            EXTERNAL_READ);
+                }
             }
         });
 
@@ -72,6 +84,13 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 updateUserData();
+            }
+        });
+
+        back_arrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SettingsActivity.super.finish();
             }
         });
 
@@ -179,7 +198,7 @@ public class SettingsActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }else{
-                Toast.makeText(SettingsActivity.this, "Couldn't get bitmap of image", Toast.LENGTH_LONG).show();
+                //Toast.makeText(SettingsActivity.this, "Couldn't get bitmap of image", Toast.LENGTH_LONG).show();
             }
         }
     }

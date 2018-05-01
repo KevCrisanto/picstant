@@ -79,10 +79,12 @@ public class LikesFragment extends Fragment {
                     String username = like.getStory_username();
                     String image = like.getStory_image();
                     String title = like.getStory_title();
+                    int story_id = like.getStory_id();
 
                     Intent intent = new Intent(getContext(), CheckLikedImageActivity.class);
                     intent.putExtra("image_url", image);
                     intent.putExtra("image_title", title);
+                    intent.putExtra("story_id", story_id);
 
                     startActivity(intent);
                 }
@@ -178,7 +180,7 @@ public class LikesFragment extends Fragment {
                 }
         );
 
-        VolleyHandler.getInstance(getContext().getApplicationContext()).addRequestToQueue(stringRequest);
+        VolleyHandler.getInstance(getContext()).addRequestToQueue(stringRequest);
     }
 
 }

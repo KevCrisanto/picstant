@@ -121,7 +121,7 @@ public class HomeFragment extends Fragment {
                 }
         );
 
-        VolleyHandler.getInstance(getContext().getApplicationContext()).addRequestToQueue(stringRequest);
+        VolleyHandler.getInstance(getContext()).addRequestToQueue(stringRequest);
 
     }
 
@@ -168,7 +168,7 @@ public class HomeFragment extends Fragment {
                 }
         );
 
-        VolleyHandler.getInstance(getContext().getApplicationContext()).addRequestToQueue(stringRequest);
+        VolleyHandler.getInstance(getContext()).addRequestToQueue(stringRequest);
         //Volley.newRequestQueue(getContext().getApplicationContext()).add(stringRequest);
 
     }
