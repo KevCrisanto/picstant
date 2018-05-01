@@ -126,6 +126,7 @@ public class LoginActivity extends AppCompatActivity {
                         finish();
                         startActivity(new Intent(LoginActivity.this, MainActivity.class));
                     } else{
+                        mProgressDialog.dismiss();
                         Toast.makeText(LoginActivity.this, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
                     }
 

@@ -25,6 +25,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -246,6 +248,16 @@ public class ProfileActivity extends AppCompatActivity {
                                 follow_this_profile.setEnabled(false);
                                 follow_this_profile.setText(getApplicationContext().getResources().getString(R.string.follow));
 
+                                //  Immediately decrease the number of followers by 1
+                                String text_num_of_followers = followers_num_tv.getText().toString();
+                                int num_of_followers = 100;
+                                try {
+                                    num_of_followers = Integer.parseInt(text_num_of_followers);
+                                }catch(NumberFormatException nfe) {
+                                    nfe.printStackTrace();
+                                }
+                                followers_num_tv.setText(String.format("%d", num_of_followers - 1));
+
                             } else{
                                 Toast.makeText(ProfileActivity.this, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
                             }
@@ -288,6 +300,16 @@ public class ProfileActivity extends AppCompatActivity {
 
                                 follow_this_profile.setEnabled(false);
                                 follow_this_profile.setText(getApplicationContext().getResources().getString(R.string.unfollow));
+
+                                //  Immediately increase the number of followers by 1
+                                String text_num_of_followers = followers_num_tv.getText().toString();
+                                int num_of_followers = 100;
+                                try {
+                                    num_of_followers = Integer.parseInt(text_num_of_followers);
+                                }catch(NumberFormatException nfe) {
+                                    nfe.printStackTrace();
+                                }
+                                followers_num_tv.setText(String.format("%d", num_of_followers + 1));
 
                             } else{
                                 Toast.makeText(ProfileActivity.this, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
