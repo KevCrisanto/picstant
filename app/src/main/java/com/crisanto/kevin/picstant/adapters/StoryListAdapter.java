@@ -4,6 +4,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.crisanto.kevin.picstant.CommentsActivity;
+import com.crisanto.kevin.picstant.ProfileActivity;
 import com.crisanto.kevin.picstant.R;
 import com.crisanto.kevin.picstant.helpers.SharedPreferenceManager;
 import com.crisanto.kevin.picstant.helpers.SquareImageView;
@@ -109,8 +110,96 @@ public class StoryListAdapter extends ArrayAdapter<Story> {
 
             int story_id = story.getId();
             didCurrentUserLikeThisStory(story_id, redHeart, whiteHeart);
+
+            getUserData(story.getPublisher_id(), profile_photo, username);
+            //visitProfile(view, story.getPublisher_id(), getUserData(story.getPublisher_id()));
         }
         return view;
+    }
+
+    private void visitProfile(final int id, final User user, CircleImageView profile_photo, TextView username_tv){
+
+        final String username = user.getUsername();
+        final String image = user.getImage();
+        final String email = user.getEmail();
+        final int following = user.getFollowing();
+        final int followers = user.getFollowers();
+        final int posts = user.getPosts();
+        final String description = user.getDescription();
+
+        profile_photo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent profileIntent = new Intent(getContext(), ProfileActivity.class);
+                profileIntent.putExtra("user_id", id);
+                profileIntent.putExtra("username", username);
+                profileIntent.putExtra("email", email);
+                profileIntent.putExtra("image", image);
+                profileIntent.putExtra("following", following);
+                profileIntent.putExtra("followers", followers);
+                profileIntent.putExtra("posts", posts);
+                profileIntent.putExtra("description", description);
+
+                getContext().startActivity(profileIntent);
+            }
+        });
+
+        username_tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent profileIntent = new Intent(getContext(), ProfileActivity.class);
+                profileIntent.putExtra("user_id", id);
+                profileIntent.putExtra("username", username);
+                profileIntent.putExtra("email", email);
+                profileIntent.putExtra("image", image);
+                profileIntent.putExtra("following", following);
+                profileIntent.putExtra("followers", followers);
+                profileIntent.putExtra("posts", posts);
+                profileIntent.putExtra("description", description);
+
+                getContext().startActivity(profileIntent);
+            }
+        });
+
+    }
+
+    private void getUserData(final int user_id, final CircleImageView profile_photo, final TextView username){
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, URLS.get_user_data+user_id, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    if(!jsonObject.getBoolean("error")){
+                        JSONObject jsonObjectUser = jsonObject.getJSONObject("user");
+
+                        User user = new User(jsonObjectUser.getInt("id"), jsonObjectUser.getString("email"),
+                                jsonObjectUser.getString("username"), jsonObjectUser.getString("image"),
+                                jsonObjectUser.getInt("following"), jsonObjectUser.getInt("followers"),
+                                jsonObjectUser.getInt("posts"), jsonObjectUser.getString("description"));
+
+                        visitProfile(user_id, user, profile_photo, username);
+
+                    } else{
+                        Toast.makeText(getContext(), jsonObject.getString("message"), Toast.LENGTH_LONG).show();
+                    }
+
+                } catch(JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                }
+        );
+
+        VolleyHandler.getInstance(getContext()).addRequestToQueue(stringRequest);
     }
 
     private void didCurrentUserLikeThisStory(final int story_id, final ImageView redHeart, final ImageView whiteHeart){

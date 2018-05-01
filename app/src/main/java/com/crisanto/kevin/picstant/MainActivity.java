@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -47,6 +48,24 @@ public class MainActivity extends AppCompatActivity {
     User user;
     String mProfileImage, mEmail, mDescription, mUsername;
 
+    public void onBackPressed() {
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        Fragment currentFragment = fragmentManager.findFragmentByTag("FRAGMENT_HOME");;
+        if(currentFragment != null && currentFragment.isVisible())
+        {
+            super.finish();
+        }
+        else {
+            int count = getFragmentManager().getBackStackEntryCount();
+            if (count == 0) {
+                super.onBackPressed();
+                startActivity(new Intent(this, MainActivity.class));
+            } else {
+                getFragmentManager().popBackStack();
+            }
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +105,10 @@ public class MainActivity extends AppCompatActivity {
         Fragment fragment = null;
 
         if (item == R.id.home) {
-            fragment = new HomeFragment();
+            //fragment = new HomeFragment();
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.main_fragment_content, new HomeFragment(), "FRAGMENT_HOME");
+            ft.commit();
         } else if(item == R.id.search) {
             fragment = new SearchFragment();
             startActivity(new Intent(MainActivity.this,SearchActivity.class));

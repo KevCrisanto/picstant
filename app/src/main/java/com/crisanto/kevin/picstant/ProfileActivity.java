@@ -40,6 +40,12 @@ public class ProfileActivity extends AppCompatActivity {
     ArrayList<Image> arrayListImages;
     ImageArrayAdapter imageArrayAdapter;
 
+    @Override
+    public void onBackPressed() {
+        setResult(RESULT_CANCELED);
+        super.onBackPressed();
+        startActivity(new Intent(ProfileActivity.this, MainActivity.class));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
