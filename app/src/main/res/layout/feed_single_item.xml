@@ -34,6 +34,7 @@
                 android:layout_toRightOf="@id/profile_photo"
                 android:textColor="@color/colorBlack"/>
 
+            <!-- This part will be implemented later
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
@@ -42,6 +43,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="20dp"
                 android:id="@+id/threedots_iv"/>
+                -->
 
         </RelativeLayout>
 

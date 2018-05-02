@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,10 +46,13 @@ public class ProfileFragment extends Fragment {
     User user;
     int user_id, posts, followers, following;
     String description, image;
+    boolean firstVisit;
 
     public ProfileFragment() {
         // Required empty public constructor
     }
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -82,9 +86,14 @@ public class ProfileFragment extends Fragment {
 
         getUserData();
         getAllImages();
-        //goToSettings();
+        firstVisit = true;
 
         return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
     }
 
     @Override
@@ -101,8 +110,19 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        getUserData();
+        if (firstVisit){
+            firstVisit = false;
+        }else{
+            getUserData();
+            //images_grid_layout.setAdapter(null);
+            arrayListImages.clear();
+            imageArrayAdapter.notifyDataSetChanged();
+            images_grid_layout.setAdapter(imageArrayAdapter);
+            getAllImages();
+        }
     }
+
+
 
     private void goToSettings(){
         Intent settingsIntent = new Intent(getContext(), SettingsActivity.class);

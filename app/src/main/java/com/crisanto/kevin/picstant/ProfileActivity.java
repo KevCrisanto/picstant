@@ -90,6 +90,18 @@ public class ProfileActivity extends AppCompatActivity {
         getAllImages();
     }
 
+    /*@Override
+    protected void onRestart() {
+        super.onRestart();
+        getAllImages();
+    }*/
+
+    /*@Override
+    protected void onResume() {
+        super.onResume();
+        getAllImages();
+    }*/
+
     private void getAllImages(){
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, URLS.get_all_images+other_user_id, new Response.Listener<String>() {

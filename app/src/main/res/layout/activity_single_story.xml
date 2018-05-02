@@ -101,6 +101,16 @@
             android:visibility="visible"
             android:src="@drawable/ic_comment_bubble"/>
 
+        <ImageView
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:id="@+id/delete_iv"
+            android:layout_centerInParent="true"
+            android:layout_marginRight="10dp"
+            android:layout_alignParentRight="true"
+            android:visibility="invisible"
+            android:src="@drawable/ic_delete"/>
+
     </RelativeLayout>
 
     <TextView
