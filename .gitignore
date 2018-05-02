@@ -58,4 +58,4 @@ freeline_project_description.json
 .DS_Store
 
 #Ignore URLS (database)
-app/src/main/java/com/crisanto/kevin/picstant/URLS.java
+app/src/main/java/com/crisanto/kevin/picstant/helpers/URLS.java
