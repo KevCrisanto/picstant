@@ -2,6 +2,8 @@
 
 This Android app was heavily inspired by Instagram and its main goal is to let users share their images.
 
+![picstant](/images/picstant.jpg)
+
 ## Features
 
 ### Authentication
@@ -28,3 +30,8 @@ You can search for other users and follow them to see their images without havin
 You can like images and view them later. You can also post and read comments.
 
 ![like and comment](/images/like_comment.gif)
+
+## Want to try it?
+No problem! Just [download the APK](https://github.com/KevCrisanto/picstant/releases/)!
+
+Make sure to enable "unknow sources" in your device before installing it.
