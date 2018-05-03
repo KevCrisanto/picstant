@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -173,6 +174,11 @@ public class SettingsActivity extends AppCompatActivity {
 
         }; // end of StringRequest
 
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                20*1000,
+                0,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
         VolleyHandler.getInstance(getApplicationContext()).addRequestToQueue(stringRequest);
     }
 
@@ -262,6 +268,10 @@ public class SettingsActivity extends AppCompatActivity {
                 }
 
             }; // end of StringRequest
+            stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                    20*1000,
+                    0,
+                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
             VolleyHandler.getInstance(getApplicationContext()).addRequestToQueue(stringRequest);
         }

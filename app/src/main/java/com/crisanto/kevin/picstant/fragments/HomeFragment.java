@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -121,6 +122,11 @@ public class HomeFragment extends Fragment {
                 }
         );
 
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                20*1000,
+                0,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
         VolleyHandler.getInstance(getContext()).addRequestToQueue(stringRequest);
 
     }
@@ -167,6 +173,11 @@ public class HomeFragment extends Fragment {
                     }
                 }
         );
+
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                20*1000,
+                0,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         VolleyHandler.getInstance(getContext()).addRequestToQueue(stringRequest);
         //Volley.newRequestQueue(getContext().getApplicationContext()).add(stringRequest);

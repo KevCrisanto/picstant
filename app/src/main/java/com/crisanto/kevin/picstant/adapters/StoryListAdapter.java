@@ -1,4 +1,5 @@
 package com.crisanto.kevin.picstant.adapters;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -418,6 +419,11 @@ public class StoryListAdapter extends ArrayAdapter<Story> {
                     }
                 }
         );
+
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                20*1000,
+                0,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         VolleyHandler.getInstance(getContext().getApplicationContext()).addRequestToQueue(stringRequest);
     }

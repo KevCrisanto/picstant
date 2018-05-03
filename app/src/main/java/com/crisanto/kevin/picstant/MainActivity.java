@@ -2,6 +2,7 @@ package com.crisanto.kevin.picstant;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -17,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.support.v7.widget.Toolbar;
@@ -47,6 +49,9 @@ public class MainActivity extends AppCompatActivity {
     NavigationView mNavigationView;
     User user;
     String mProfileImage, mEmail, mDescription, mUsername;
+    LinearLayout mHeaderContainer;
+    AnimationDrawable mAnimationDrawable;
+    View mHeaderView;
 
     public void onBackPressed() {
 
@@ -72,9 +77,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mNavigationView = findViewById(R.id.main_nav_view);
+
+        mHeaderView = mNavigationView.getHeaderView(0);
+        mHeaderContainer = (LinearLayout)mHeaderView.findViewById(R.id.header_background);
+        if(mHeaderContainer != null) {
+            mAnimationDrawable = (AnimationDrawable) mHeaderContainer.getBackground();
+            mAnimationDrawable.setEnterFadeDuration(5000);
+            mAnimationDrawable.setExitFadeDuration(2000);
+        }
+
         // Layout variables
         mDrawerLayout = findViewById(R.id.main_drawer_layout);
-        mNavigationView = findViewById(R.id.main_nav_view);
         mActionDrawerToggle = new ActionBarDrawerToggle( this, mDrawerLayout, R.string.open, R.string.close);
         mDrawerLayout.addDrawerListener(mActionDrawerToggle);
         mActionDrawerToggle.syncState();
@@ -191,6 +205,9 @@ public class MainActivity extends AppCompatActivity {
         } else{
             getUserData();
         }
+        if (mAnimationDrawable != null && !mAnimationDrawable.isRunning()) {
+            mAnimationDrawable.start();
+        }
     }
 
     @Override
@@ -202,6 +219,9 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
         } else{
             getUserData();
+        }
+        if (mAnimationDrawable != null && !mAnimationDrawable.isRunning()) {
+            mAnimationDrawable.stop();
         }
     }
 
