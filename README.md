@@ -17,7 +17,7 @@ You can change your description and profile image.
 ![edit profile](/images/edit_profile.gif)
 
 ### Upload and delete images
-YOu can upload your images and delete it if you want.
+You can upload your images and delete them if you want.
 
 ![upload and delete images](/images/upload_delete.gif)
 
